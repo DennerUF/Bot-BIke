@@ -5,9 +5,12 @@ const recognizer = new BikeRecognizer();
 
 const {Menu} = require('../Dialogs/Menu/menu');
 const menuDialog = new Menu();
+const {Tipo} = require('../Dialogs/Tipo/tipo');
+const TipoDialog = new Tipo();
+const {Default} = require('../Dialogs/Default/default');
+const defaultDialog = new Default();
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
-
 const TEXT_PROMPT = 'textPrompt';
 class MainDialog extends ComponentDialog {
     constructor() {
@@ -15,6 +18,8 @@ class MainDialog extends ComponentDialog {
 
         
         this.addDialog(menuDialog)
+            .addDialog(TipoDialog)
+            .addDialog(defaultDialog)
             .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
                 this.startDialog.bind(this),
                 this.finishDialog.bind(this)

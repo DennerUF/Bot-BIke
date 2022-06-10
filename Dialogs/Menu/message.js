@@ -1,3 +1,8 @@
+const { ChoiceFactory } = require('botbuilder-dialogs');
 module.exports = {
-    choose: `Escolha um dos filtros para pesquisar pela bicicleta:\nTipo, Cor, Gênero, Preço`
+    choose: {
+        prompt: 'Escolha um dos filtros para pesquisar pela bicicleta:',
+        choices: ChoiceFactory.toChoices(['Tipo', 'Cor', 'Gênero', 'Preço']),
+        retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar qual sua escolha'
+    }
 }
