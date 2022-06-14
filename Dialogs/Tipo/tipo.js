@@ -2,6 +2,8 @@ const { WaterfallDialog, ChoicePrompt, ComponentDialog } = require('botbuilder-d
 const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
 const recognizer = new BikeRecognizer();
 const msg = require('./message');
+const isEndDialog = require('../../Helpers/isEndDialog');
+
 
 const TIPO_DIALOG = 'TIPO';
 const CHOOSE_FILTER_TYPE = 'CHOOSE_FILTER_TYPE';
@@ -21,16 +23,27 @@ class Tipo extends ComponentDialog {
 
     async chooseFilterType(stepContext) {
         await stepContext.context.sendActivity(msg.message);
-        return stepContext.prompt(CHOOSE_FILTER_TYPE, msg.chooseType);
+        return stepContext.prompt(CHOOSE_FILTER_TYPE, msg.chooseType); 
     }
 
     async beginIntentFilter(stepContext) {
-        const entitie = await recognizer.getEntities(stepContext.context);
-        return stepContext.beginDialog('SHOWBIKES', { filter:'type', value: entitie.type[0][0]});
+        if (await isEndDialog(stepContext)) {  return stepContext.endDialog(); }
+        return stepContext.beginDialog('SHOWBIKES', { filter:'type', value: stepContext.result});
     }
     async chooseTypePromptValidator(stepContext){
+        const entitie = await recognizer.getEntities(stepContext.context);
+        console.log(entitie);
+        if (!entitie.type && stepContext.attemptCount < 3) {
+            return false;
+        } else if (!entitie.type && stepContext.attemptCount == 3) {
+            stepContext.recognized.value = 'finishDialog';
+            return true;
+        }
+        stepContext.recognized.value = entitie.type[0][0];
         return true;
     }
+
+    
 
 
 
