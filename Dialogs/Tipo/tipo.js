@@ -26,7 +26,7 @@ class Tipo extends ComponentDialog {
 
     async beginIntentFilter(stepContext) {
         const entitie = await recognizer.getEntities(stepContext.context);
-        return stepContext.beginDialog('DEFAULT', { filter:TIPO_DIALOG, data: entitie.type[0][0]});
+        return stepContext.beginDialog('SHOWBIKES', { filter:'type', value: entitie.type[0][0]});
     }
     async chooseTypePromptValidator(stepContext){
         return true;
