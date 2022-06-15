@@ -2,8 +2,6 @@ const { WaterfallDialog, ComponentDialog } = require('botbuilder-dialogs');
 const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
 const cardMaker = require('../../Helpers/cardMaker');
 
-
-
 const recognizer = new BikeRecognizer();
 const TEXTPROMPT = 'TEXTPROMPT';
 const msg = require('./message');
