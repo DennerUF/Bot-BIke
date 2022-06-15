@@ -3,6 +3,7 @@ const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
 const recognizer = new BikeRecognizer();
 const msg = require('./message');
 const isEndDialog = require('../../Helpers/isEndDialog');
+const filterBikes = require('../../Helpers/filterBikes');
 
 
 const TIPO_DIALOG = 'TIPO';
@@ -28,11 +29,15 @@ class Tipo extends ComponentDialog {
 
     async beginIntentFilter(stepContext) {
         if (await isEndDialog(stepContext)) {  return stepContext.endDialog(); }
-        return stepContext.beginDialog('SHOWBIKES', { filter:'type', value: stepContext.result});
+        let bikes = await filterBikes('type', stepContext.result);
+        if (!bikes || bikes.length <= 0) {
+            await stepContext.context.sendActivity(msg.message);
+            return stepContext.replaceDialog('MENU');
+        }
+        return stepContext.beginDialog('SHOWBIKES', bikes);
     }
     async chooseTypePromptValidator(stepContext){
         const entitie = await recognizer.getEntities(stepContext.context);
-        console.log(entitie);
         if (!entitie.type && stepContext.attemptCount < 3) {
             return false;
         } else if (!entitie.type && stepContext.attemptCount == 3) {
