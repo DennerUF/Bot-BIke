@@ -19,14 +19,21 @@ class Tipo extends ComponentDialog {
             ]));
 
         this.initialDialogId = TIPO_DIALOG;
-
     }
-
+    /**
+     * First step of the waterfall. Display ChoicePrompt filter types
+     * @param stepContext Dialog Context
+     * @returns ChoicePrompt filter types
+     */
     async chooseFilterType(stepContext) {
         await stepContext.context.sendActivity(msg.message);
         return stepContext.prompt(CHOOSE_FILTER_TYPE, msg.chooseType); 
     }
-
+    /**
+     * Calls the 'ShowBike' dialog passing a list of bikes to be displayed
+     * @param stepContext 
+     * @returns 
+     */
     async beginIntentFilter(stepContext) {
         if (await isEndDialog(stepContext)) {  return stepContext.endDialog(); }
         let bikes = await filterBikes('type', stepContext.result);
@@ -36,6 +43,13 @@ class Tipo extends ComponentDialog {
         }
         return stepContext.beginDialog('SHOWBIKES', bikes);
     }
+    /**
+     * Validates 'chooseFilterType' response with entities from LUIS. 
+     * And counts the amount of wrong answers from the user, 
+     * After three errors, adds "finishDialog" to 'stepContext.recognized.value' signaling to the prompt method that the dialog must be closed
+     * @param stepContext 
+     * @returns boolean 
+     */
     async chooseTypePromptValidator(stepContext){
         const entitie = await recognizer.getEntities(stepContext.context);
         if (!entitie.type && stepContext.attemptCount < 3) {

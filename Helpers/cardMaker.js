@@ -1,4 +1,9 @@
 const {  CardFactory } = require('botbuilder');
+/**
+ * Build card with bike information
+ * @param {object} bike - bike information
+ * @returns card
+ */
 module.exports = (bike)=>{
     return CardFactory.heroCard(
         `${bike.name}

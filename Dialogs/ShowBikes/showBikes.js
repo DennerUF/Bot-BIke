@@ -20,14 +20,27 @@ class ShowBikes extends ComponentDialog {
         this.initialDialogId = SHOWBIKES_DIALOG;
 
     }
-
+    /**
+     * First waterfall step
+     * Shows the bike card with the chosen characteristics
+     * @param stepContext 
+     * @returns 
+     */
     async showBike(stepContext) {
         stepContext.values.bikes = stepContext.options;
         const bike = stepContext.options[0];
         await stepContext.context.sendActivity({ attachments: [cardMaker(bike)] });
         return { status: 'waiting' }
     }
-
+    /**
+     * It uses Luis intents and entities to interpret the user's response and know what to do next. 
+     * If want to know more information about the bike. 
+     * Or if want to see another bike with the same characteristics. 
+     * Or if want to perform another search with new filters. 
+     * Also checks if the number of cards has reached the end
+     * @param stepContext 
+     * @returns 
+     */
     async nextAction(stepContext) {
         const entitie = await recognizer.getEntities(stepContext.context);
         const intent = await recognizer.getTopIntent(stepContext);
@@ -41,7 +54,7 @@ class ShowBikes extends ComponentDialog {
             stepContext.values.bikes.shift();
             return stepContext.replaceDialog(SHOWBIKES_DIALOG, stepContext.values.bikes);
         }
-        await stepContext.context.sendActivity('Infelizmente tinhamos apenas essas bicicletas nessas caracteristicas. inicie uma nova busca com filtros diferentes.');
+        await stepContext.context.sendActivity(msg.message);
         return stepContext.replaceDialog('MENU');
 
     }
