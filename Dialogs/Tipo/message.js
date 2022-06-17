@@ -3,7 +3,8 @@ const { ChoiceFactory } = require('botbuilder-dialogs');
  * Messages dialog Tipo
  */
 module.exports = {
-    message:'Infelizmente não encontramos nenhuma bicicleta com essas caracteristicas. Pesquise por outra categoria de filtro',
+    message:'Boa Escolha! Vem comigo para selecionar a sua magrela🚲',
+    messageError:'Infelizmente não encontramos nenhuma bicicleta com essas caracteristicas. Pesquise por outra categoria de filtro',
     chooseType: {
         prompt: `Qual opção está procurando ?`,
         choices: ChoiceFactory.toChoices(['Infantil', 'Casual', 'Estrada', 'Mountain Bike', 'Elétrica', 'Outro filtro']),

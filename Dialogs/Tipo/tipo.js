@@ -38,7 +38,7 @@ class Tipo extends ComponentDialog {
         if (await isEndDialog(stepContext)) {  return stepContext.endDialog(); }
         let bikes = await filterBikes('type', stepContext.result);
         if (!bikes || bikes.length <= 0) {
-            await stepContext.context.sendActivity(msg.message);
+            await stepContext.context.sendActivity(msg.messageError);
             return stepContext.replaceDialog('MENU');
         }
         return stepContext.beginDialog('SHOWBIKES', bikes);
