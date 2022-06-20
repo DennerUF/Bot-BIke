@@ -1,6 +1,6 @@
 const { WaterfallDialog, ComponentDialog } = require('botbuilder-dialogs');
 const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
-const cardMaker = require('../../Helpers/cardMaker');
+const card = require('../../Helpers/cardMaker');
 
 const recognizer = new BikeRecognizer();
 
@@ -12,9 +12,9 @@ class ShowBikes extends ComponentDialog {
     constructor() {
         super(SHOWBIKES_DIALOG);
         this.addDialog(new WaterfallDialog(SHOWBIKES_DIALOG, [
-                this.showBike.bind(this),
-                this.nextAction.bind(this),
-            ]));
+            this.showBike.bind(this),
+            this.nextAction.bind(this),
+        ]));
 
         this.initialDialogId = SHOWBIKES_DIALOG;
 
@@ -26,9 +26,14 @@ class ShowBikes extends ComponentDialog {
      * @returns 
      */
     async showBike(stepContext) {
-        stepContext.values.bikes = stepContext.options;
-        const bike = stepContext.options[0];
-        await stepContext.context.sendActivity({ attachments: [cardMaker(bike)] });
+        stepContext.values.bikes = stepContext.options.bikes;
+        const bike = stepContext.options.bikes[0];
+
+        if (stepContext.options.description) {
+            await stepContext.context.sendActivity({ attachments: [card.descriptionCard(bike)] });
+        } else {
+            await stepContext.context.sendActivity({ attachments: [card.fullCard(bike)] });
+        }
         return { status: 'waiting' }
     }
     /**
@@ -47,11 +52,10 @@ class ShowBikes extends ComponentDialog {
         if (intent == 'MENU') {
             return stepContext.replaceDialog('MENU');
         } else if (entitie.informacao) {
-            await stepContext.context.sendActivity(bikes[0].description);
-            return stepContext.next();
+            return stepContext.replaceDialog(SHOWBIKES_DIALOG, { bikes: stepContext.values.bikes, description: true });
         } else if (bikes.length > 1) {
             stepContext.values.bikes.shift();
-            return stepContext.replaceDialog(SHOWBIKES_DIALOG, stepContext.values.bikes);
+            return stepContext.replaceDialog(SHOWBIKES_DIALOG, { bikes: stepContext.values.bikes });
         }
         await stepContext.context.sendActivity(msg.message);
         return stepContext.replaceDialog('MENU');

@@ -5,7 +5,7 @@ const msg = require('./message');
 const isEndDialog = require('../../Helpers/isEndDialog');
 const filterBikes = require('../../Helpers/filterBikes');
 
-const {ShowBikes} = require('../ShowBikes/showBikes');
+const { ShowBikes } = require('../ShowBikes/showBikes');
 const showBikes = new ShowBikes();
 
 
@@ -45,7 +45,7 @@ class Tipo extends ComponentDialog {
             await stepContext.context.sendActivity(msg.messageError);
             return stepContext.replaceDialog('MENU');
         }
-        return stepContext.beginDialog('SHOWBIKES', bikes);
+        return stepContext.beginDialog('SHOWBIKES', { bikes: bikes });
     }
     /**
      * Validates 'chooseFilterType' response with entities from LUIS. 
