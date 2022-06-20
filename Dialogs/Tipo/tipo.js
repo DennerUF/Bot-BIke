@@ -5,6 +5,9 @@ const msg = require('./message');
 const isEndDialog = require('../../Helpers/isEndDialog');
 const filterBikes = require('../../Helpers/filterBikes');
 
+const {ShowBikes} = require('../ShowBikes/showBikes');
+const showBikes = new ShowBikes();
+
 
 const TIPO_DIALOG = 'TIPO';
 const CHOOSE_FILTER_TYPE = 'CHOOSE_FILTER_TYPE';
@@ -13,6 +16,7 @@ class Tipo extends ComponentDialog {
         super(TIPO_DIALOG);
 
         this.addDialog(new ChoicePrompt(CHOOSE_FILTER_TYPE, this.chooseTypePromptValidator))
+            .addDialog(showBikes)
             .addDialog(new WaterfallDialog(TIPO_DIALOG, [
                 this.chooseFilterType.bind(this),
                 this.beginIntentFilter.bind(this)
@@ -27,7 +31,7 @@ class Tipo extends ComponentDialog {
      */
     async chooseFilterType(stepContext) {
         await stepContext.context.sendActivity(msg.message);
-        return stepContext.prompt(CHOOSE_FILTER_TYPE, msg.chooseType); 
+        return stepContext.prompt(CHOOSE_FILTER_TYPE, msg.chooseType);
     }
     /**
      * Calls the 'ShowBike' dialog passing a list of bikes to be displayed
@@ -35,7 +39,7 @@ class Tipo extends ComponentDialog {
      * @returns 
      */
     async beginIntentFilter(stepContext) {
-        if (await isEndDialog(stepContext)) {  return stepContext.endDialog(); }
+        if (await isEndDialog(stepContext)) { return stepContext.endDialog(); }
         let bikes = await filterBikes('type', stepContext.result);
         if (!bikes || bikes.length <= 0) {
             await stepContext.context.sendActivity(msg.messageError);
@@ -50,7 +54,7 @@ class Tipo extends ComponentDialog {
      * @param stepContext 
      * @returns boolean 
      */
-    async chooseTypePromptValidator(stepContext){
+    async chooseTypePromptValidator(stepContext) {
         const entitie = await recognizer.getEntities(stepContext.context);
         if (!entitie.type && stepContext.attemptCount < 3) {
             return false;
@@ -62,7 +66,7 @@ class Tipo extends ComponentDialog {
         return true;
     }
 
-    
+
 
 
 

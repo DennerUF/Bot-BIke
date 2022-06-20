@@ -3,7 +3,8 @@ const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
 const cardMaker = require('../../Helpers/cardMaker');
 
 const recognizer = new BikeRecognizer();
-const TEXTPROMPT = 'TEXTPROMPT';
+
+
 const msg = require('./message');
 
 const SHOWBIKES_DIALOG = 'SHOWBIKES';
@@ -11,9 +12,9 @@ class ShowBikes extends ComponentDialog {
     constructor() {
         super(SHOWBIKES_DIALOG);
         this.addDialog(new WaterfallDialog(SHOWBIKES_DIALOG, [
-            this.showBike.bind(this),
-            this.nextAction.bind(this),
-        ]));
+                this.showBike.bind(this),
+                this.nextAction.bind(this),
+            ]));
 
         this.initialDialogId = SHOWBIKES_DIALOG;
 

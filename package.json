@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index",
-    "test": "nyc --reporter=html mocha --timeout 1000000 Test/**/*.test.js"
+    "test": "nyc --reporter=html mocha --timeout 1000000 Test/**/**.test.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
     "chai": "^4.3.6",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.16",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "sinon": "^14.0.0"
   }
 }

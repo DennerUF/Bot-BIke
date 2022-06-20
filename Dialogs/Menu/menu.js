@@ -4,10 +4,9 @@ const recognizer = new BikeRecognizer();
 const msg = require('./message');
 const isEndDialog = require('../../Helpers/isEndDialog');
 
-const {Tipo} = require('../Tipo/tipo');
+const { Tipo } = require('../Tipo/tipo');
 const TipoDialog = new Tipo();
-const {ShowBikes} = require('../ShowBikes/showBikes');
-const showBikes = new ShowBikes();
+
 
 const MENU_DIALOG = 'MENU';
 const CHOOSE_FILTER = 'CHOOSE_FILTER';
@@ -16,8 +15,7 @@ class Menu extends ComponentDialog {
         super('MENU');
 
         this.addDialog(new ChoicePrompt(CHOOSE_FILTER, this.choosePromptValidator))
-        .addDialog(TipoDialog)
-        .addDialog(showBikes)
+            .addDialog(TipoDialog)
             .addDialog(new WaterfallDialog(MENU_DIALOG, [
                 this.chooseFilter.bind(this),
                 this.beginIntentFilter.bind(this)
@@ -40,7 +38,7 @@ class Menu extends ComponentDialog {
      * 
      */
     async beginIntentFilter(stepContext) {
-        if (await isEndDialog(stepContext)) {return stepContext.endDialog();} 
+        if (await isEndDialog(stepContext)) { return stepContext.endDialog(); }
         return stepContext.beginDialog(stepContext.result.toUpperCase());
     }
     /**
