@@ -9,20 +9,20 @@ const { ShowBikes } = require('../ShowBikes/showBikes');
 const showBikes = new ShowBikes();
 
 
-const TIPO_DIALOG = 'TIPO';
+const TYPE_DIALOG = 'TYPE';
 const CHOOSE_FILTER_TYPE = 'CHOOSE_FILTER_TYPE';
-class Tipo extends ComponentDialog {
+class Type extends ComponentDialog {
     constructor() {
-        super(TIPO_DIALOG);
+        super(TYPE_DIALOG);
 
         this.addDialog(new ChoicePrompt(CHOOSE_FILTER_TYPE, this.chooseTypePromptValidator))
             .addDialog(showBikes)
-            .addDialog(new WaterfallDialog(TIPO_DIALOG, [
+            .addDialog(new WaterfallDialog(TYPE_DIALOG, [
                 this.chooseFilterType.bind(this),
                 this.beginIntentFilter.bind(this)
             ]));
 
-        this.initialDialogId = TIPO_DIALOG;
+        this.initialDialogId = TYPE_DIALOG;
     }
     /**
      * First step of the waterfall. Display ChoicePrompt filter types
@@ -75,4 +75,4 @@ class Tipo extends ComponentDialog {
 
 }
 
-module.exports.Tipo = Tipo;
+module.exports.Type = Type;

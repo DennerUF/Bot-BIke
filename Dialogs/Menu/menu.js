@@ -4,8 +4,8 @@ const recognizer = new BikeRecognizer();
 const msg = require('./message');
 const isEndDialog = require('../../Helpers/isEndDialog');
 
-const { Tipo } = require('../Tipo/tipo');
-const TipoDialog = new Tipo();
+const { Type } = require('../Type/type');
+const TypeDialog = new Type();
 
 
 const MENU_DIALOG = 'MENU';
@@ -15,7 +15,7 @@ class Menu extends ComponentDialog {
         super('MENU');
 
         this.addDialog(new ChoicePrompt(CHOOSE_FILTER, this.choosePromptValidator))
-            .addDialog(TipoDialog)
+            .addDialog(TypeDialog)
             .addDialog(new WaterfallDialog(MENU_DIALOG, [
                 this.chooseFilter.bind(this),
                 this.beginIntentFilter.bind(this)

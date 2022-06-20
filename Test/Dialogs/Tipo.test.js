@@ -1,9 +1,9 @@
 const { DialogTestClient, DialogTestLogger } = require('botbuilder-testing');
-const { Tipo } = require('../../Dialogs/Tipo/tipo');
+const { Type } = require('../../Dialogs/Type/type');
 const assert = require('assert');
-const testCases = require('./TestData/tipoCases')
-describe('Tipo', () => {
-    const sut = new Tipo();
+const testCases = require('./TestData/typeCases')
+describe('Type', () => {
+    const sut = new Type();
     testCases.map(testData => {
         it(testData.name, async () => {
             const client = new DialogTestClient('test', sut, {}, [new DialogTestLogger()]);

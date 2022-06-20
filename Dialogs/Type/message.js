@@ -1,6 +1,6 @@
 const { ChoiceFactory } = require('botbuilder-dialogs');
 /**
- * Messages dialog Tipo
+ * Messages dialog Type
  */
 module.exports = {
     message:'Boa Escolha! Vem comigo para selecionar a sua magrela🚲',
