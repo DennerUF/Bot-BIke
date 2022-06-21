@@ -1,4 +1,4 @@
-const cardMaker = require('../../../Helpers/cardMaker');
+const card = require('../../../Helpers/cardMaker');
 let bikes = {
     bikeTypeMountainBike: [
         {
@@ -39,8 +39,8 @@ module.exports = [
         initialData: bikes.bikeTypeMountainBike,
         steps:
             [
-                ['', [cardMaker(bikes.bikeTypeMountainBike[0])]],
-                ['Ver Proxima opção de bicicleta', [cardMaker(bikes.bikeTypeMountainBike[1])]],
+                ['', [card.fullCard(bikes.bikeTypeMountainBike[0])]],
+                ['Ver Proxima opção de bicicleta', [card.fullCard(bikes.bikeTypeMountainBike[1])]],
                 ['Ver Proxima opção de bicicleta', 'Infelizmente não encontramos mais nenhuma bicicleta com essas caracteristicas. Pesquise por outra categoria de filtro'],
             ],
         expectedStatus: 'waiting',

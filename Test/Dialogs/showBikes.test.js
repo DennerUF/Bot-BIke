@@ -8,7 +8,7 @@ describe('Show Bkies', () => {
     const sut = new ShowBikes();
     testCases.map(testData => {
         it(testData.name, async () => {
-            const client = new DialogTestClient('test', sut,menuDialog, testData.initialData, [new DialogTestLogger()]);
+            const client = new DialogTestClient('test', sut, testData.initialData, [new DialogTestLogger()]);
             for (let i = 0; i < testData.steps.length; i++) {
                 let reply = await client.sendActivity(testData.steps[i][0]);
                 if(reply.attachments){
