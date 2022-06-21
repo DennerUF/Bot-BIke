@@ -28,7 +28,7 @@ class Color extends ComponentDialog {
         this.initialDialogId = COLOR_DIALOG;
     }
     /**
-     * First step of the waterfall. Display ChoicePrompt filter types
+     * 
      * @param stepContext Dialog Context
      * @returns ChoicePrompt filter types
      */
@@ -36,9 +36,9 @@ class Color extends ComponentDialog {
         return stepContext.prompt(TEXTPROMPT,msg.textPrompt);
     }
     /**
-     * First step of the waterfall. Display ChoicePrompt filter types
+     *
      * @param stepContext Dialog Context
-     * @returns ChoicePrompt filter types
+     * @returns ChoicePrompt filter colors
      */
     async secondChanceChoicerColor(stepContext) {
         const entitie = await recognizer.getEntities(stepContext.context);
@@ -48,7 +48,7 @@ class Color extends ComponentDialog {
         return stepContext.next(entitie.color[0][0]);
     }
     /**
-     * Calls the 'ShowBike' dialog passing a list of bikes to be displayed
+     * 
      * @param stepContext 
      * @returns 
      */
@@ -64,7 +64,7 @@ class Color extends ComponentDialog {
         return stepContext.beginDialog('SHOWBIKES', { bikes: bikes });
     }
     /**
-     * Validates 'chooseFilterType' response with entities from LUIS. 
+     * Validates 'secondChanceChoicerColor' response with entities from LUIS. 
      * And counts the amount of wrong answers from the user, 
      * After three errors, adds "finishDialog" to 'stepContext.recognized.value' signaling to the prompt method that the dialog must be closed
      * @param stepContext 

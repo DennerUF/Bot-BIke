@@ -20,7 +20,7 @@ module.exports = {
     descriptionCard: (bike)=>{
     return CardFactory.heroCard(
         `${bike.name}`,`${bike.description}`,'',
-        ['Mais Informações sobre a bicicleta','Ver Proxima opção de bicicleta','Explorar outro filtro de pesquisa']
+        ['Ver Proxima opção de bicicleta','Explorar outro filtro de pesquisa','Encerrar']
     );
 },
 
