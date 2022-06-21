@@ -8,6 +8,8 @@ const { Type } = require('../Type/type');
 const TypeDialog = new Type();
 const { Color } = require('../Color/color');
 const ColorDialog = new Color();
+const { Gender } = require('../Gender/gender');
+const GenderDialog = new Gender();
 
 
 const MENU_DIALOG = 'MENU';
@@ -19,6 +21,7 @@ class Menu extends ComponentDialog {
         this.addDialog(new ChoicePrompt(CHOOSE_FILTER, this.choosePromptValidator))
             .addDialog(TypeDialog)
             .addDialog(ColorDialog)
+            .addDialog(GenderDialog)
             .addDialog(new WaterfallDialog(MENU_DIALOG, [
                 this.chooseFilter.bind(this),
                 this.beginIntentFilter.bind(this)

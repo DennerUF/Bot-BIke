@@ -9,29 +9,28 @@ const { ShowBikes } = require('../ShowBikes/showBikes');
 const showBikes = new ShowBikes();
 
 
-const TYPE_DIALOG = 'TYPE';
-const CHOOSE_FILTER_TYPE = 'CHOOSE_FILTER_TYPE';
-class Type extends ComponentDialog {
+const GENDER_DIALOG = 'GENDER';
+const CHOOSE_FILTER_GENDER = 'CHOOSE_FILTER_GENDER';
+class Gender extends ComponentDialog {
     constructor() {
-        super(TYPE_DIALOG);
+        super(GENDER_DIALOG);
 
-        this.addDialog(new ChoicePrompt(CHOOSE_FILTER_TYPE, this.chooseTypePromptValidator))
+        this.addDialog(new ChoicePrompt(CHOOSE_FILTER_GENDER, this.chooseGenderPromptValidator))
             .addDialog(showBikes)
-            .addDialog(new WaterfallDialog(TYPE_DIALOG, [
-                this.chooseFilterType.bind(this),
+            .addDialog(new WaterfallDialog(GENDER_DIALOG, [
+                this.chooseFilterGender.bind(this),
                 this.beginIntentFilter.bind(this)
             ]));
 
-        this.initialDialogId = TYPE_DIALOG;
+        this.initialDialogId = GENDER_DIALOG;
     }
     /**
      * First step of the waterfall. Display ChoicePrompt filter types
      * @param stepContext Dialog Context
      * @returns ChoicePrompt filter types
      */
-    async chooseFilterType(stepContext) {
-        await stepContext.context.sendActivity(msg.message);
-        return stepContext.prompt(CHOOSE_FILTER_TYPE, msg.chooseType);
+    async chooseFilterGender(stepContext) {
+        return stepContext.prompt(CHOOSE_FILTER_GENDER, msg.chooseGender);
     }
     /**
      * Calls the 'ShowBike' dialog passing a list of bikes to be displayed
@@ -41,7 +40,7 @@ class Type extends ComponentDialog {
     async beginIntentFilter(stepContext) {
         if (await isEndDialog(stepContext)) { return stepContext.endDialog(); }
         if (stepContext.result == 'menuDialog') { return stepContext.replaceDialog('MENU'); }
-        let bikes = await filterBikes('type', stepContext.result);
+        let bikes = await filterBikes('gender', stepContext.result);
         if (!bikes || bikes.length <= 0) {
             await stepContext.context.sendActivity(msg.messageError);
             return stepContext.replaceDialog('MENU');
@@ -49,24 +48,24 @@ class Type extends ComponentDialog {
         return stepContext.beginDialog('SHOWBIKES', { bikes: bikes });
     }
     /**
-     * Validates 'chooseFilterType' response with entities from LUIS. 
+     * Validates 'chooseFilterGender' response with entities from LUIS. 
      * And counts the amount of wrong answers from the user, 
      * After three errors, adds "finishDialog" to 'stepContext.recognized.value' signaling to the prompt method that the dialog must be closed
      * @param stepContext 
      * @returns boolean 
      */
-    async chooseTypePromptValidator(stepContext) {
+    async chooseGenderPromptValidator(stepContext) {
         const entitie = await recognizer.getEntities(stepContext.context);
         if(entitie.anotherFilter){
             stepContext.recognized.value = 'menuDialog';
             return true;
-        }else if (!entitie.type && stepContext.attemptCount < 3) {
+        }else if (!entitie.gender && stepContext.attemptCount < 3) {
             return false;
-        } else if (!entitie.type && stepContext.attemptCount == 3) {
+        } else if (!entitie.gender && stepContext.attemptCount == 3) {
             stepContext.recognized.value = 'finishDialog';
             return true;
         }
-        stepContext.recognized.value = entitie.type[0][0];
+        stepContext.recognized.value = entitie.gender[0][0];
         return true;
     }
 
@@ -79,4 +78,4 @@ class Type extends ComponentDialog {
 
 }
 
-module.exports.Type = Type;
+module.exports.Gender = Gender;
