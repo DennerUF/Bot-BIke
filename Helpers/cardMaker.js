@@ -19,7 +19,7 @@ module.exports = {
 },
     descriptionCard: (bike)=>{
     return CardFactory.heroCard(
-        `${bike.name}`,`${bike.description}`, CardFactory.images([]),
+        `${bike.name}`,`${bike.description}`, CardFactory.images([`${bike.image}`]),
         ['Ver Proxima opcao de bicicleta','Explorar outro filtro de pesquisa','Encerrar']
     );
 },
