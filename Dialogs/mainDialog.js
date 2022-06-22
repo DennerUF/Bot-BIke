@@ -3,8 +3,10 @@ const { ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialo
 const { BikeRecognizer } = require('../Luis/BikeRecognizer');
 const recognizer = new BikeRecognizer();
 
-const {Menu} = require('../Dialogs/Menu/menu');
+const { Menu } = require('../Dialogs/Menu/menu');
 const menuDialog = new Menu();
+const { ShowBikes } = require('../Dialogs/ShowBikes/showBikes');
+const showBikes = new ShowBikes();
 
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
@@ -13,8 +15,9 @@ class MainDialog extends ComponentDialog {
     constructor() {
         super('MainDialog');
 
-        
+
         this.addDialog(menuDialog)
+            .addDialog(showBikes)
             .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
                 this.startDialog.bind(this),
                 this.finishDialog.bind(this)
@@ -30,29 +33,29 @@ class MainDialog extends ComponentDialog {
         const dialogContext = await dialogSet.createContext(turnContext);
         const results = await dialogContext.continueDialog();
 
-        
+
         if (results.status === DialogTurnStatus.empty) {
             await dialogContext.beginDialog(this.id);
         }
     }
 
-    async startDialog(stepContext){
+    async startDialog(stepContext) {
         const intent = await recognizer.getTopIntent(stepContext);
-        if(intent != 'NONE' && stepContext.context._activity.type != 'conversationUpdate'){
+        if (intent != 'NONE' && stepContext.context._activity.type != 'conversationUpdate') {
             return stepContext.beginDialog(intent);
-        }else if(stepContext.state.dialogContext.stack[0].id !== intent && stepContext.context._activity.type == 'conversationUpdate'){
+        } else if (stepContext.state.dialogContext.stack[0].id !== intent && stepContext.context._activity.type == 'conversationUpdate') {
             console.log('entrou verificacao conversationUpdate ')
             return stepContext.beginDialog('MENU');
         }
-        return {waiting: 'waiting'};
-         
+        return { waiting: 'waiting' };
+
     }
-    async finishDialog(stepContext){
-      
+    async finishDialog(stepContext) {
+
         return stepContext.endDialog();
     }
 
-    
+
 }
 
 module.exports.MainDialog = MainDialog;

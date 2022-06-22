@@ -46,6 +46,8 @@ class ShowBikes extends ComponentDialog {
      * @returns 
      */
     async nextAction(stepContext) {
+        console.log('text')
+        console.log(stepContext.context._activity.text)
         const entitie = await recognizer.getEntities(stepContext.context);
         const intent = await recognizer.getTopIntent(stepContext);
         const bikes = stepContext.values.bikes;
