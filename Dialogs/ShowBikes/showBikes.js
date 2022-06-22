@@ -49,7 +49,11 @@ class ShowBikes extends ComponentDialog {
         console.log('text')
         console.log(stepContext.context._activity.text)
         const entitie = await recognizer.getEntities(stepContext.context);
+        console.log('entitie')
+        console.log(entitie)
         const intent = await recognizer.getTopIntent(stepContext);
+        console.log('intent')
+        console.log(intent)
         const bikes = stepContext.values.bikes;
         if (intent == 'MENU') {
             return stepContext.replaceDialog('MENU');
