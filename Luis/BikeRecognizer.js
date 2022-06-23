@@ -19,7 +19,7 @@ class BikeRecognizer {
      * @returns Recognized Intents and Entities
      */
     async executeLuisQuery(context) {
-        return await this.recognizer.recognize(context);
+        return this.recognizer.recognize(context);
     }
     /**
      * Returns highest scoring intent
@@ -35,7 +35,7 @@ class BikeRecognizer {
      * @param context Dialog context
      * @returns Recognized entities
      */
-    async getEntities(context){
+    async getEntities(context){//add try-catch
         const entites = await this.executeLuisQuery(context)
         return entites.entities;
     }
