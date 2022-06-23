@@ -57,7 +57,6 @@ class Price extends ComponentDialog {
      */
     async choosePricePromptValidator(stepContext) {
         const entitie = await recognizer.getEntities(stepContext.context);
-        console.log(entitie.price);
         if (entitie.anotherFilter) {
             stepContext.recognized.value = 'menuDialog';
             return true;

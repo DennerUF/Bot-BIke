@@ -44,7 +44,6 @@ class MainDialog extends ComponentDialog {
         if (intent != 'NONE' && stepContext.context._activity.type != 'conversationUpdate') {
             return stepContext.beginDialog(intent);
         } else if (stepContext.state.dialogContext.stack[0].id !== intent && stepContext.context._activity.type == 'conversationUpdate') {
-            console.log('entrou verificacao conversationUpdate ')
             return stepContext.beginDialog('MENU');
         }
         return { waiting: 'waiting' };
