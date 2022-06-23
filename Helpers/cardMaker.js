@@ -2,7 +2,7 @@ const {  CardFactory } = require('botbuilder');
 /**
  * Build card complete with information about the bike 
  * Or just the description of the bike
- * @param {object} bike - bike information
+ * @param bike - bike information
  * @returns Object with two functions (fullCard ; descriptionCard)
  * fullCard : Build full card;
  * description Card : Build card with bike description;

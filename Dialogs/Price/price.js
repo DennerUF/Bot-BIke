@@ -25,14 +25,15 @@ class Price extends ComponentDialog {
         this.initialDialogId = PRICE_DIALOG;
     }
     /**
-     * First step of the waterfall. Display ChoicePrompt filter types
+     * Display 'ChoicePrompt' with price filters
      * @param stepContext Dialog Context
-     * @returns ChoicePrompt filter types
+     * @returns ChoicePrompt filter price
      */
     async chooseFilterPrice(stepContext) {
         return stepContext.prompt(CHOOSE_FILTER_PRICE, msg.choosePrice);
     }
     /**
+     * Checks if the user has reached the limits of wrong answers, if yes, closes the dialog
      * Calls the 'ShowBike' dialog passing a list of bikes to be displayed
      * @param stepContext 
      * @returns 

@@ -28,15 +28,15 @@ class Color extends ComponentDialog {
         this.initialDialogId = COLOR_DIALOG;
     }
     /**
-     * 
+     * First step of the waterfall. Display TextPrompt asking about color to filter
      * @param stepContext Dialog Context
-     * @returns ChoicePrompt filter types
+     * @returns TextPrompt
      */
     async chooseFilterColor(stepContext) {
         return stepContext.prompt(TEXTPROMPT,msg.textPrompt);
     }
     /**
-     *
+     *  Displays Color ChoicePrompt if user didn't answer the first question correctly
      * @param stepContext Dialog Context
      * @returns ChoicePrompt filter colors
      */
@@ -48,13 +48,12 @@ class Color extends ComponentDialog {
         return stepContext.next(entitie.color[0][0]);
     }
     /**
-     * 
+     * Checks if the user has reached the limits of wrong answers, if yes, closes the dialog
+     * Calls the 'ShowBike' dialog passing a list of bikes to be displayed
      * @param stepContext 
      * @returns 
      */
     async beginIntentFilter(stepContext) {
-        console.log('stepContext.result')
-        console.log(stepContext.result)
         if (await isEndDialog(stepContext)) { return stepContext.endDialog(); }
         let bikes = await filterBikes('color', stepContext.result);
         if (!bikes || bikes.length <= 0) {

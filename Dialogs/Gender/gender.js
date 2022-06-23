@@ -33,6 +33,7 @@ class Gender extends ComponentDialog {
         return stepContext.prompt(CHOOSE_FILTER_GENDER, msg.chooseGender);
     }
     /**
+     * Checks if the user has reached the limits of wrong answers, if yes, closes the dialog
      * Calls the 'ShowBike' dialog passing a list of bikes to be displayed
      * @param stepContext 
      * @returns 
