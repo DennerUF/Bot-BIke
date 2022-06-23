@@ -26,7 +26,7 @@ class Price extends ComponentDialog {
     }
     /**
      * Display 'ChoicePrompt' with price filters
-     * @param stepContext Dialog Context
+     * @param {TurnContext} stepContext Dialog Context
      * @returns ChoicePrompt filter price
      */
     async chooseFilterPrice(stepContext) {
@@ -35,8 +35,8 @@ class Price extends ComponentDialog {
     /**
      * Checks if the user has reached the limits of wrong answers, if yes, closes the dialog
      * Calls the 'ShowBike' dialog passing a list of bikes to be displayed
-     * @param stepContext 
-     * @returns 
+     * @param {TurnContext} stepContext Dialog Context 
+     * @returns {Promise<DialogTurnStatus>} start new dialog
      */
     async beginIntentFilter(stepContext) {
         if (await isEndDialog(stepContext)) { return stepContext.endDialog(); }
@@ -52,7 +52,7 @@ class Price extends ComponentDialog {
      * Validates 'chooseFilterPrice' response with entities from LUIS. 
      * And counts the amount of wrong answers from the user, 
      * After three errors, adds "finishDialog" to 'stepContext.recognized.value' signaling to the prompt method that the dialog must be closed
-     * @param stepContext 
+     * @param {TurnContext} stepContext Dialog Context 
      * @returns boolean 
      */
     async choosePricePromptValidator(stepContext) {

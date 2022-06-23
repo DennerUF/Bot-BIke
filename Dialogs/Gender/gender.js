@@ -25,9 +25,9 @@ class Gender extends ComponentDialog {
         this.initialDialogId = GENDER_DIALOG;
     }
     /**
-     * First step of the waterfall. Display ChoicePrompt filter types
-     * @param stepContext Dialog Context
-     * @returns ChoicePrompt filter types
+     * First step of the waterfall. Display ChoicePrompt filter Gender
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<ChoicePrompt>} filter Gender
      */
     async chooseFilterGender(stepContext) {
         return stepContext.prompt(CHOOSE_FILTER_GENDER, msg.chooseGender);
@@ -35,8 +35,8 @@ class Gender extends ComponentDialog {
     /**
      * Checks if the user has reached the limits of wrong answers, if yes, closes the dialog
      * Calls the 'ShowBike' dialog passing a list of bikes to be displayed
-     * @param stepContext 
-     * @returns 
+     * @param {TurnContext} stepContext Dialog Context 
+     * @returns {Promise<DialogTurnStatus>} start new dialog
      */
     async beginIntentFilter(stepContext) {
         if (await isEndDialog(stepContext)) { return stepContext.endDialog(); }
@@ -52,7 +52,7 @@ class Gender extends ComponentDialog {
      * Validates 'chooseFilterGender' response with entities from LUIS. 
      * And counts the amount of wrong answers from the user, 
      * After three errors, adds "finishDialog" to 'stepContext.recognized.value' signaling to the prompt method that the dialog must be closed
-     * @param stepContext 
+     * @param {TurnContext} stepContext Dialog Context 
      * @returns boolean 
      */
     async chooseGenderPromptValidator(stepContext) {

@@ -35,16 +35,16 @@ class Menu extends ComponentDialog {
     }
     /**
      * First step of the waterfall. Display ChoicePrompt filter categories
-     * @param stepContext Dialog Context
-     * @returns ChoicePrompt filter categories
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<ChoicePrompt>} filter categories
      */
     async chooseFilter(stepContext) {
         return stepContext.prompt(CHOOSE_FILTER, msg.choose);
     }
     /**
      * Second waterfall step. Starts dialog of the chosen category
-     * @param stepContext 
-     * 
+     * @param {TurnContext} stepContext Dialog Context 
+     * @return {Promise<DialogTurnStatus>} start new dialog
      */
     async beginIntentFilter(stepContext) {
         if (await isEndDialog(stepContext)) { return stepContext.endDialog(); }
@@ -54,7 +54,7 @@ class Menu extends ComponentDialog {
      * Validates 'chooseFilter' response with entities from LUIS. 
      * And counts the amount of wrong answers from the user, 
      * After three errors, adds "finishDialog" to 'stepContext.recognized.value' signaling to the prompt method that the dialog must be closed
-     * @param stepContext 
+     * @param {TurnContext} stepContext Dialog Context 
      * @returns boolean 
      */
     async choosePromptValidator(stepContext) {

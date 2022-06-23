@@ -38,7 +38,11 @@ class MainDialog extends ComponentDialog {
             await dialogContext.beginDialog(this.id);
         }
     }
-
+    /**
+     * start new dialog or continue active
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>} DialogTurnStatus
+     */
     async startDialog(stepContext) {
         const intent = await recognizer.getTopIntent(stepContext);
         if (intent != 'NONE' && stepContext.context._activity.type != 'conversationUpdate') {
@@ -46,11 +50,15 @@ class MainDialog extends ComponentDialog {
         } else if (stepContext.state.dialogContext.stack[0].id !== intent && stepContext.context._activity.type == 'conversationUpdate') {
             return stepContext.beginDialog('MENU');
         }
-        return { waiting: 'waiting' };
+        return stepContext.continueDialog();
 
     }
+    /**
+     * End dialog
+     * @param {TurnContext} stepContext 
+     * @returns {Promise<DialogTurnStatus>} DialogTurnStatus
+     */
     async finishDialog(stepContext) {
-
         return stepContext.endDialog();
     }
 

@@ -1,4 +1,4 @@
-const { WaterfallDialog, ChoicePrompt, TextPrompt, ComponentDialog } = require('botbuilder-dialogs');
+const { WaterfallDialog, ChoicePrompt, TextPrompt, ComponentDialog, DialogTurnStatus } = require('botbuilder-dialogs');
 const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
 const recognizer = new BikeRecognizer();
 const msg = require('./message');
@@ -29,16 +29,16 @@ class Color extends ComponentDialog {
     }
     /**
      * First step of the waterfall. Display TextPrompt asking about color to filter
-     * @param stepContext Dialog Context
-     * @returns TextPrompt
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<TextPrompt>} Ask what color bike
      */
     async chooseFilterColor(stepContext) {
         return stepContext.prompt(TEXTPROMPT,msg.textPrompt);
     }
     /**
      *  Displays Color ChoicePrompt if user didn't answer the first question correctly
-     * @param stepContext Dialog Context
-     * @returns ChoicePrompt filter colors
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<ChoicePrompt>} color option
      */
     async secondChanceChoicerColor(stepContext) {
         const entitie = await recognizer.getEntities(stepContext.context);
@@ -50,8 +50,8 @@ class Color extends ComponentDialog {
     /**
      * Checks if the user has reached the limits of wrong answers, if yes, closes the dialog
      * Calls the 'ShowBike' dialog passing a list of bikes to be displayed
-     * @param stepContext 
-     * @returns 
+     * @param {TurnContext} stepContext Dialog Context 
+     * @returns {Promise<DialogTurnStatus>} start new dialog
      */
     async beginIntentFilter(stepContext) {
         if (await isEndDialog(stepContext)) { return stepContext.endDialog(); }
@@ -66,8 +66,8 @@ class Color extends ComponentDialog {
      * Validates 'secondChanceChoicerColor' response with entities from LUIS. 
      * And counts the amount of wrong answers from the user, 
      * After three errors, adds "finishDialog" to 'stepContext.recognized.value' signaling to the prompt method that the dialog must be closed
-     * @param stepContext 
-     * @returns boolean 
+     * @param {TurnContext} stepContext Dialog Context 
+     * @returns boolean
      */
     async chooseColorPromptValidator(stepContext) {
         const entitie = await recognizer.getEntities(stepContext.context);

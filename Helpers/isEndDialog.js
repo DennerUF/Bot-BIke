@@ -1,7 +1,7 @@
 /**
  * Checks if the 'stepContext.result' of the dialog context is equal to "finishDialog". 
  * If yes, the user has reached the limit of three wrong answers
- * @param dc Dialog context
+ * @param {TurnContext} dc Dialog context
  * @returns boolean
  */
 module.exports = async (dc) => {

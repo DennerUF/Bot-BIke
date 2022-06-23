@@ -1,4 +1,4 @@
-const { WaterfallDialog, ComponentDialog } = require('botbuilder-dialogs');
+const { WaterfallDialog, ComponentDialog,DialogTurnStatus,TextPrompt } = require('botbuilder-dialogs');
 const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
 const card = require('../../Helpers/cardMaker');
 
@@ -6,12 +6,13 @@ const recognizer = new BikeRecognizer();
 
 
 const msg = require('./message');
-
+const TEXT_PROMPT = 'textPrompt';
 const SHOWBIKES_DIALOG = 'SHOWBIKES';
 class ShowBikes extends ComponentDialog {
     constructor() {
         super(SHOWBIKES_DIALOG);
-        this.addDialog(new WaterfallDialog(SHOWBIKES_DIALOG, [
+        this.addDialog(new TextPrompt(TEXT_PROMPT))
+        .addDialog(new WaterfallDialog(SHOWBIKES_DIALOG, [
             this.showBike.bind(this),
             this.nextAction.bind(this),
         ]));
@@ -22,8 +23,8 @@ class ShowBikes extends ComponentDialog {
     /**
      * First waterfall step
      * Shows the bike card with the chosen characteristics
-     * @param stepContext 
-     * @returns 
+     * @param {TurnContext} stepContext Dialog Context 
+     * @returns {Promise<DialogTurnStatus>} { status: DialogTurnStatus.waiting }
      */
     async showBike(stepContext) {
         stepContext.values.bikes = stepContext.options.bikes;
@@ -34,7 +35,7 @@ class ShowBikes extends ComponentDialog {
         } else {
             await stepContext.context.sendActivity({ attachments: [card.fullCard(bike)] });
         }
-        return { status: 'waiting' }
+        return stepContext.prompt(TEXT_PROMPT);
     }
     /**
      * It uses Luis intents and entities to interpret the user's response and know what to do next. 
@@ -42,8 +43,8 @@ class ShowBikes extends ComponentDialog {
      * Or if want to see another bike with the same characteristics. 
      * Or if want to perform another search with new filters. 
      * Also checks if the number of cards has reached the end
-     * @param stepContext 
-     * @returns 
+     * @param {TurnContext} stepContext Dialog Context 
+     * @returns {Promise<DialogTurnStatus>} start new dialog
      */
     async nextAction(stepContext) {
         const entitie = await recognizer.getEntities(stepContext.context);

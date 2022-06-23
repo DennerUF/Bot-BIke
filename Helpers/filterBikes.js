@@ -1,13 +1,14 @@
 const SearchBikes = require('./searchBikes');
+const apiService = new SearchBikes();
+
 /**
  * Filters bikes according to user-chosen characteristics
- * @param filterCategory Filter category
- * @param value Filter category value
- * @returns Selected bikes array
+ * @param {string} filterCategory Filter category
+ * @param {(object|string)}value Filter category value
+ * @returns {object[]} Selected bikes 
  */
 module.exports = async (filterCategory,value)=>{
-    const apiService = new SearchBikes();
-    let bikes = await apiService.search();
+    const bikes = await apiService.search();
     if(!bikes){return false}
     if(filterCategory == 'price'){
         if(value.min && value.max){
