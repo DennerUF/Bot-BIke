@@ -1,9 +1,9 @@
 const { DialogBot } = require('./dialogBot');
 
 class WelcomeBot extends DialogBot {
-    constructor(conversationState, userState, dialog) {
-        super(conversationState, userState, dialog);
-
+    constructor(conversationState, userState, dialog,luis) {
+        super(conversationState, userState, dialog, luis);
+        
         this.onMembersAdded(async (context, next) => {
             const membersAdded = context.activity.membersAdded;
             for (let cnt = 0; cnt < membersAdded.length; cnt++) {

@@ -1,7 +1,9 @@
 const { ActivityHandler } = require('botbuilder');
 
+
+
 class DialogBot extends ActivityHandler {
-    constructor(conversationState, userState, dialog) {
+    constructor(conversationState, userState, dialog,luis) {
         super();
         if (!conversationState) throw new Error('[DialogBot]: Missing parameter. conversationState is required');
         if (!userState) throw new Error('[DialogBot]: Missing parameter. userState is required');
@@ -11,8 +13,12 @@ class DialogBot extends ActivityHandler {
         this.userState = userState;
         this.dialog = dialog;
         this.dialogState = this.conversationState.createProperty('DialogState');
+        this.luis = luis;
 
         this.onMessage(async (context, next) => {
+            if(context.activity.type === 'message'){
+                context.luisResult = await this.luis.executeLuisQuery(context);
+            }
             await this.dialog.run(context, this.dialogState);
             await next();
         });

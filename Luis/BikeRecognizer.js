@@ -1,17 +1,20 @@
 require('dotenv').config();
 const { LuisRecognizer } = require('botbuilder-ai');
-const { LuisAppId, LuisAPIKey, LuisAPIHostName } = process.env;
+
 
 class BikeRecognizer {
-    constructor(){
-        const luisConfig = { applicationId: LuisAppId, endpointKey: LuisAPIKey, endpoint: `https://${LuisAPIHostName}` };
-        if (luisConfig) {
+    constructor(config){
+        const luisIsConfigured = config && config.applicationId && config.endpointKey && config.endpoint;
+        if (luisIsConfigured) {
             const recognizerOptions = {
                 apiVersion: 'v3'
             };
         
-            this.recognizer = new LuisRecognizer(luisConfig, recognizerOptions);
+            this.recognizer = new LuisRecognizer(config, recognizerOptions);
         }
+    }
+    get isConfigured() {
+        return (this.recognizer !== undefined);
     }
     /**
      * Call LUIS to interpret user message
@@ -21,24 +24,7 @@ class BikeRecognizer {
     async executeLuisQuery(context) {
         return this.recognizer.recognize(context);
     }
-    /**
-     * Returns highest scoring intent
-     * @param context Dialog context
-     * @returns Uppercase high-scoring intent
-     */
-    async getTopIntent(context){
-        const luisResult = await this.executeLuisQuery(context);
-        return LuisRecognizer.topIntent(luisResult).toUpperCase();
-    }
-    /**
-     * Returns recognized entities
-     * @param context Dialog context
-     * @returns Recognized entities
-     */
-    async getEntities(context){//add try-catch
-        const entites = await this.executeLuisQuery(context)
-        return entites.entities;
-    }
+    
 }
 
 

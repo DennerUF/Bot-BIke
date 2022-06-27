@@ -1,7 +1,7 @@
 const { ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialog } = require('botbuilder-dialogs');
 
-const { BikeRecognizer } = require('../Luis/BikeRecognizer');
-const recognizer = new BikeRecognizer();
+
+const recognizer = require('../Helpers/getLuis');
 
 const { Menu } = require('../Dialogs/Menu/menu');
 const menuDialog = new Menu();
@@ -44,10 +44,15 @@ class MainDialog extends ComponentDialog {
      * @returns {Promise<DialogTurnStatus>} DialogTurnStatus
      */
     async startDialog(stepContext) {
-        const intent = await recognizer.getTopIntent(stepContext);
-        if (intent != 'NONE' && stepContext.context._activity.type != 'conversationUpdate') {
+
+        if (stepContext.context._activity.type != 'conversationUpdate') {
+            const intent = recognizer.getTopIntent(stepContext.context.luisResult);
+            if(!intent){
+                await stepContext.context.sendActivity('Encontramos um erro. Tente novamente');
+                return stepContext.endDialog();
+            }
             return stepContext.beginDialog(intent);
-        } else if (stepContext.state.dialogContext.stack[0].id !== intent && stepContext.context._activity.type == 'conversationUpdate') {
+        } else if (stepContext.context._activity.type == 'conversationUpdate') {
             return stepContext.beginDialog('MENU');
         }
         return stepContext.continueDialog();

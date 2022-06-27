@@ -11,6 +11,7 @@ const {
 
 const { WelcomeBot } = require('./Bots/welcomeBot');
 const { MainDialog } = require('./Dialogs/mainDialog');
+const { BikeRecognizer } = require('./Luis/BikeRecognizer');
 
 const server = restify.createServer();
 server.use(restify.plugins.bodyParser());
@@ -30,14 +31,17 @@ const botFrameworkAuthentication = createBotFrameworkAuthenticationFromConfigura
 
 const adapter = new CloudAdapter(botFrameworkAuthentication);
 
+const { LuisAppId, LuisAPIKey, LuisAPIHostName } = process.env;
+const luisConfig = { applicationId: LuisAppId, endpointKey: LuisAPIKey, endpoint: `https://${LuisAPIHostName}` };
+
 const memoryStorage = new MemoryStorage();
 
 const userState = new UserState(memoryStorage);
 const conversationState = new ConversationState(memoryStorage);
 
-
+const luis = new BikeRecognizer(luisConfig);
 const dialog = new MainDialog();
-const bot = new WelcomeBot(conversationState, userState, dialog);
+const bot = new WelcomeBot(conversationState, userState, dialog,luis);
 
 adapter.onTurnError = async (context, error) => {
     console.error(`\n [onTurnError] unhandled error: ${ error }`);

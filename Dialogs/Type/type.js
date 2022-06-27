@@ -1,6 +1,6 @@
 const { WaterfallDialog, ChoicePrompt, ComponentDialog } = require('botbuilder-dialogs');
-const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
-const recognizer = new BikeRecognizer();
+
+const recognizer = require('../../Helpers/getLuis');
 const msg = require('./message');
 const isEndDialog = require('../../Helpers/isEndDialog');
 const filterBikes = require('../../Helpers/filterBikes');
@@ -57,8 +57,10 @@ class Type extends ComponentDialog {
      * @returns boolean 
      */
     async chooseTypePromptValidator(stepContext) {
-        const entitie = await recognizer.getEntities(stepContext.context);
-        if(entitie.anotherFilter){
+        const entitie = recognizer.getEntities(stepContext.context.luisResult);
+        if(!entitie){
+            return false;
+        }else if (entitie.anotherFilter) {
             stepContext.recognized.value = 'menuDialog';
             return true;
         }else if (!entitie.type && stepContext.attemptCount < 3) {

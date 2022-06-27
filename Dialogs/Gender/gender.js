@@ -1,6 +1,6 @@
 const { WaterfallDialog, ChoicePrompt, ComponentDialog } = require('botbuilder-dialogs');
-const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
-const recognizer = new BikeRecognizer();
+
+const recognizer = require('../../Helpers/getLuis');
 const msg = require('./message');
 const isEndDialog = require('../../Helpers/isEndDialog');
 const filterBikes = require('../../Helpers/filterBikes');
@@ -56,11 +56,11 @@ class Gender extends ComponentDialog {
      * @returns boolean 
      */
     async chooseGenderPromptValidator(stepContext) {
-        const entitie = await recognizer.getEntities(stepContext.context);
+        const entitie = await recognizer.getEntities(stepContext.context.luisResult);
         if(entitie.anotherFilter){
             stepContext.recognized.value = 'menuDialog';
             return true;
-        }else if (!entitie.gender && stepContext.attemptCount < 3) {
+        }else if (!entitie || (!entitie.gender && stepContext.attemptCount < 3)) {
             return false;
         } else if (!entitie.gender && stepContext.attemptCount == 3) {
             stepContext.recognized.value = 'finishDialog';

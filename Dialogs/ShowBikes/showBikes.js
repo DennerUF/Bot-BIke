@@ -1,8 +1,8 @@
 const { WaterfallDialog, ComponentDialog,DialogTurnStatus,TextPrompt } = require('botbuilder-dialogs');
-const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
+
 const card = require('../../Helpers/cardMaker');
 
-const recognizer = new BikeRecognizer();
+const recognizer = require('../../Helpers/getLuis');
 
 
 const msg = require('./message');
@@ -35,7 +35,7 @@ class ShowBikes extends ComponentDialog {
         } else {
             await stepContext.context.sendActivity({ attachments: [card.fullCard(bike)] });
         }
-        return stepContext.prompt(TEXT_PROMPT);
+        return stepContext.prompt(TEXT_PROMPT); 
     }
     /**
      * It uses Luis intents and entities to interpret the user's response and know what to do next. 
@@ -47,10 +47,12 @@ class ShowBikes extends ComponentDialog {
      * @returns {Promise<DialogTurnStatus>} start new dialog
      */
     async nextAction(stepContext) {
-        const entitie = await recognizer.getEntities(stepContext.context);
-        const intent = await recognizer.getTopIntent(stepContext);
+        const entitie = await recognizer.getEntities(stepContext.context.luisResult);
+        const intent = await recognizer.getTopIntent(stepContext.context.luisResult);
         const bikes = stepContext.values.bikes;
-        if (intent == 'MENU') {
+        if(!entitie || !intent){
+            return false;
+        }else if (intent == 'MENU') {
             return stepContext.replaceDialog('MENU');
         } else if (entitie.informacao) {
             return stepContext.replaceDialog(SHOWBIKES_DIALOG, { bikes: stepContext.values.bikes, description: true });

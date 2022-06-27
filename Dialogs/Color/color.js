@@ -1,6 +1,6 @@
 const { WaterfallDialog, ChoicePrompt, TextPrompt, ComponentDialog, DialogTurnStatus } = require('botbuilder-dialogs');
-const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
-const recognizer = new BikeRecognizer();
+
+const recognizer = require('../../Helpers/getLuis');
 const msg = require('./message');
 const isEndDialog = require('../../Helpers/isEndDialog');
 const filterBikes = require('../../Helpers/filterBikes');
@@ -41,8 +41,9 @@ class Color extends ComponentDialog {
      * @returns {Promise<ChoicePrompt>} color option
      */
     async secondChanceChoicerColor(stepContext) {
-        const entitie = await recognizer.getEntities(stepContext.context);
-        if (!entitie.color) {
+        const entitie = await recognizer.getEntities(stepContext.context.luisResult);
+        
+        if (!entitie || !entitie.color) {
             return stepContext.prompt(CHOOSE_FILTER_COLOR, msg.chooseColor);
         }
         return stepContext.next(entitie.color[0][0]);
@@ -70,8 +71,8 @@ class Color extends ComponentDialog {
      * @returns boolean
      */
     async chooseColorPromptValidator(stepContext) {
-        const entitie = await recognizer.getEntities(stepContext.context);
-        if (!entitie.color && stepContext.attemptCount < 3) {
+        const entitie = await recognizer.getEntities(stepContext.context.luisResult);
+        if (!entitie || (!entitie.color && stepContext.attemptCount < 3)) {
             return false;
         } else if (!entitie.color && stepContext.attemptCount == 3) {
             stepContext.recognized.value = 'finishDialog';
