@@ -1,19 +1,56 @@
 const { DialogTestClient, DialogTestLogger } = require('botbuilder-testing');
 const { Menu } = require('../../Dialogs/Menu/menu');
+const sinon = require('sinon');
 const assert = require('assert');
-const testCases = require('./TestData/menuCases')
+const msg = require('./TestData/menuData');
+const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
+const { DialogBot } = require('../../Bots/dialogBot');
+const { ComponentDialog } = require('botbuilder-dialogs');
+const recognizer = require('../../Helpers/getLuis')
+
 describe('Menu', () => {
-    const sut = new Menu();
-    testCases.map(testData => {
-        it(testData.name, async () => {
-            const client = new DialogTestClient('test', sut, {}, [new DialogTestLogger()]);
-            for (let i = 0; i < testData.steps.length; i++) {
-                let reply = await client.sendActivity(testData.steps[i][0]);
-                assert.strictEqual((reply ? reply.text : null), testData.steps[i][1]);
-            }
-            assert.strictEqual(client.dialogTurnResult.status, testData.expectedStatus);
-        });
+    let sut;
+    beforeEach(()=>{
+        sut = new Menu();
+        
+        
     })
+
+    afterEach(()=>{
+        sinon.restore();
+    })
+
+    it('Caminho certo - escolhendo "Tipo"', async () => {
+        const client = new DialogTestClient('test', sut);
+        sinon.stub(recognizer,'getEntities').returns({menu:[['Type']]});
+        
+        let reply = await client.sendActivity('ola');
+        assert.strictEqual(reply.text, msg.promptMenu);
+        
+        reply = await client.sendActivity('Tipo');
+        sinon.stub(ComponentDialog.prototype, 'beginDialog').resolves({ status: 'waiting' });
+        
+        assert.strictEqual(client.dialogTurnResult.status, 'waiting');
+    });
+
+    it('Caminho errado - fallback', async () => {
+        const client = new DialogTestClient('test', sut);
+        sinon.stub(recognizer, 'getEntities').returns({})
+
+        let reply = await client.sendActivity('ola');
+        assert.strictEqual(reply.text, msg.promptMenu);
+
+        reply = await client.sendActivity('ProvocaErro');
+        assert.strictEqual(reply.text, msg.reprompt);
+
+        reply = await client.sendActivity('ProvocaErro');
+        assert.strictEqual(reply.text, msg.reprompt);
+
+        reply = await client.sendActivity('ProvocaErro');
+        assert.strictEqual(reply.text, 'Sinto muito,ainda estou aprendendo e no momento não consigo entender o que você deseja. Mas podemos tentar conversar novamente mais tarde!');
+
+        assert.strictEqual(client.dialogTurnResult.status, 'complete');
+    });
 
 
 })
