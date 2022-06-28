@@ -2,7 +2,7 @@ const { WaterfallDialog, ChoicePrompt, ComponentDialog } = require('botbuilder-d
 
 const recognizer = require('../../Helpers/getLuis');
 const msg = require('./message');
-const isEndDialog = require('../../Helpers/isEndDialog');
+const is = require('../../Helpers/isEndDialog');
 
 const { Type } = require('../Type/type');
 const TypeDialog = new Type();
@@ -47,7 +47,7 @@ class Menu extends ComponentDialog {
      * @return {Promise<DialogTurnStatus>} start new dialog
      */
     async beginIntentFilter(stepContext) {
-        if (await isEndDialog(stepContext)) { return stepContext.endDialog(); }
+        if (await is.isEndDialog(stepContext)) { return stepContext.endDialog(); }
         return stepContext.beginDialog(stepContext.result.toUpperCase());
     }
     /**

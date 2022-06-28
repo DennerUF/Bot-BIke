@@ -1,8 +1,8 @@
 const { WaterfallDialog, ChoicePrompt, ComponentDialog } = require('botbuilder-dialogs');
 const recognizer = require('../../Helpers/getLuis');
 const msg = require('./message');
-const isEndDialog = require('../../Helpers/isEndDialog');
-const filterBikes = require('../../Helpers/filterBikes');
+const is = require('../../Helpers/isEndDialog');
+const filter = require('../../Helpers/filterBikes');
 
 const { ShowBikes } = require('../ShowBikes/showBikes');
 const showBikes = new ShowBikes();
@@ -38,9 +38,9 @@ class Price extends ComponentDialog {
      * @returns {Promise<DialogTurnStatus>} start new dialog
      */
     async beginIntentFilter(stepContext) {
-        if (await isEndDialog(stepContext)) { return stepContext.endDialog(); }
+        if (await is.isEndDialog(stepContext)) { return stepContext.endDialog(); }
         if (stepContext.result == 'menuDialog') { return stepContext.replaceDialog('MENU'); }
-        let bikes = await filterBikes('price', stepContext.result);
+        let bikes = await filter.filterBikes('price', stepContext.result);
         if (!bikes || bikes.length <= 0) {
             await stepContext.context.sendActivity(msg.messageError);
             return stepContext.replaceDialog('MENU');
@@ -56,7 +56,7 @@ class Price extends ComponentDialog {
      */
     async choosePricePromptValidator(stepContext) {
         const entitie = await recognizer.getEntities(stepContext.context.luisResult);
-        if(!entitie){
+        if(!entitie && stepContext.attemptCount < 3){
             return false;
         }else if (entitie.anotherFilter) {
             stepContext.recognized.value = 'menuDialog';

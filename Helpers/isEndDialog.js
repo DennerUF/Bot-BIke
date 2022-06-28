@@ -4,11 +4,14 @@
  * @param {TurnContext} dc Dialog context
  * @returns boolean
  */
-module.exports = async (dc) => {
-    if (dc.result === 'finishDialog') {
-        await dc.context.sendActivity(
-        `Sinto muito,ainda estou aprendendo e no momento não consigo entender o que você deseja. Mas podemos tentar conversar novamente mais tarde!`);
-        return true;
-    }
-    return false;
+module.exports = {
+    async isEndDialog(dc) {
+        if (dc.result === 'finishDialog') {
+            await dc.context.sendActivity(
+                `Sinto muito,ainda estou aprendendo e no momento não consigo entender o que você deseja. Mas podemos tentar conversar novamente mais tarde!`);
+            return true;
+        }
+        return false;
+    },
+    
 }

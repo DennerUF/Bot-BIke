@@ -1,9 +1,9 @@
-const bikes = require('./TestData/bikes');
-const dataBike = require('./TestData/showBikesData');
+const bikes = require('./../TestData/bikes');
+const dataBike = require('./../TestData/showBikesData');
 const { DialogTestClient, DialogTestLogger } = require('botbuilder-testing');
 const sinon = require('sinon');
 const recognizer = require('../../Helpers/getLuis');
-const msg = require('./TestData/PriceData');
+
 const { ComponentDialog, DialogContext } = require('botbuilder-dialogs');
 const assert = require('assert');
 const { ShowBikes } = require('../../Dialogs/ShowBikes/showBikes');
@@ -13,6 +13,8 @@ describe('Teste dialogo ShowBikes', () => {
     let sut;
     beforeEach(()=>{
         sut = new ShowBikes();
+        sinon.stub(card,'fullCard').resolves(dataBike.fullcard);
+        sinon.stub(card,'descriptionCard').resolves(dataBike.descriptionCard);
         
     })
 
@@ -26,7 +28,8 @@ describe('Teste dialogo ShowBikes', () => {
         sinon.stub(recognizer,'getTopIntent').resolves({});
 
         let reply = await client.sendActivity('ola');
-        assert.notDeepStrictEqual(reply.text, card.fullCard(bikes[0]));
+        assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
+        
 
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
@@ -37,7 +40,8 @@ describe('Teste dialogo ShowBikes', () => {
         sinon.stub(recognizer,'getTopIntent').resolves({});
 
         let reply = await client.sendActivity('ola');
-        assert.notDeepStrictEqual(reply.text, card.descriptionCard(bikes[0]));
+        assert.notDeepStrictEqual(reply.text, dataBike.descriptionCard);
+        
 
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
@@ -48,10 +52,10 @@ describe('Teste dialogo ShowBikes', () => {
         sinon.stub(recognizer,'getTopIntent').resolves({});
 
         let reply = await client.sendActivity('ola');
-        assert.notDeepStrictEqual(reply.text, card.fullCard(bikes[0]));
+        assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
         
         reply = await client.sendActivity('Ver Proxima opção');
-        assert.notDeepStrictEqual(reply.text, card.fullCard(bikes[0]));
+        assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
     it('Caminho certo - escolhendo "Mais Informacoes sobre a bicicleta"', async () => {
@@ -60,10 +64,10 @@ describe('Teste dialogo ShowBikes', () => {
         sinon.stub(recognizer,'getTopIntent').resolves({});
 
         let reply = await client.sendActivity('ola');
-        assert.notDeepStrictEqual(reply.text, card.fullCard(bikes[0]));
+        assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
         
         reply = await client.sendActivity('Ver Proxima opção');
-        assert.notDeepStrictEqual(reply.text, card.descriptionCard(bikes[0]));
+        assert.notDeepStrictEqual(reply.text, dataBike.descriptionCard);
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
     it('Caminho certo - escolhendo "Explorar outro filtro de pesquisa"', async () => {
@@ -72,7 +76,7 @@ describe('Teste dialogo ShowBikes', () => {
         sinon.stub(recognizer,'getTopIntent').resolves('MENU');
         
         let reply = await client.sendActivity('ola');
-        assert.notDeepStrictEqual(reply.text, card.fullCard(bikes[0]));
+        assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
 
         sinon.stub(DialogContext.prototype, 'replaceDialog').resolves({ status: 'waiting' });
         
@@ -85,12 +89,29 @@ describe('Teste dialogo ShowBikes', () => {
         sinon.stub(recognizer,'getTopIntent').resolves({});
         
         let reply = await client.sendActivity('ola');
-        assert.notDeepStrictEqual(reply.text, card.fullCard(bikes[0]));
+        assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
 
         sinon.stub(DialogContext.prototype, 'replaceDialog').resolves({ status: 'waiting' });
         
         reply = await client.sendActivity('Ver Proxima opção de bicicleta');
         assert.strictEqual(reply.text, dataBike.message);
+        assert.strictEqual(client.dialogTurnResult.status, 'waiting');
+    });
+    it('Caminho certo - intent e entitie igual false', async () => {
+        const client = new DialogTestClient('test', sut,{bikes:bikes});
+        sinon.stub(recognizer,'getEntities').resolves(false);
+        sinon.stub(recognizer,'getTopIntent').resolves(false);
+
+        let reply = await client.sendActivity('ola');
+
+        assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
+
+        sinon.stub(DialogContext.prototype, 'replaceDialog').resolves({ status: 'waiting' });
+
+        reply = await client.sendActivity('Ver Proxima opção de bicicleta');
+        assert.strictEqual(reply.text, 'Encontramos um erro. Tente novamente');
+
+
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
 })

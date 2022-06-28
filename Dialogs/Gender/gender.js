@@ -2,8 +2,8 @@ const { WaterfallDialog, ChoicePrompt, ComponentDialog } = require('botbuilder-d
 
 const recognizer = require('../../Helpers/getLuis');
 const msg = require('./message');
-const isEndDialog = require('../../Helpers/isEndDialog');
-const filterBikes = require('../../Helpers/filterBikes');
+const is = require('../../Helpers/isEndDialog');
+const filter = require('../../Helpers/filterBikes');
 
 const { ShowBikes } = require('../ShowBikes/showBikes');
 const showBikes = new ShowBikes();
@@ -39,9 +39,9 @@ class Gender extends ComponentDialog {
      * @returns {Promise<DialogTurnStatus>} start new dialog
      */
     async beginIntentFilter(stepContext) {
-        if (await isEndDialog(stepContext)) { return stepContext.endDialog(); }
+        if (await is.isEndDialog(stepContext)) { return stepContext.endDialog(); }
         if (stepContext.result == 'menuDialog') { return stepContext.replaceDialog('MENU'); }
-        let bikes = await filterBikes('gender', stepContext.result);
+        let bikes = await filter.filterBikes('gender', stepContext.result);
         if (!bikes || bikes.length <= 0) {
             await stepContext.context.sendActivity(msg.messageError);
             return stepContext.replaceDialog('MENU');

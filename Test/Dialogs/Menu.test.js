@@ -2,11 +2,10 @@ const { DialogTestClient, DialogTestLogger } = require('botbuilder-testing');
 const { Menu } = require('../../Dialogs/Menu/menu');
 const sinon = require('sinon');
 const assert = require('assert');
-const msg = require('./TestData/menuData');
-const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
-const { DialogBot } = require('../../Bots/dialogBot');
+const msg = require('./../TestData/menuData');
 const { ComponentDialog } = require('botbuilder-dialogs');
-const recognizer = require('../../Helpers/getLuis')
+const recognizer = require('../../Helpers/getLuis');
+const isEndDialog = require('../../Helpers/isEndDialog');
 
 describe('Menu', () => {
     let sut;
@@ -23,6 +22,7 @@ describe('Menu', () => {
     it('Caminho certo - escolhendo "Tipo"', async () => {
         const client = new DialogTestClient('test', sut);
         sinon.stub(recognizer,'getEntities').returns({menu:[['Type']]});
+        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
         
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptMenu);
@@ -35,6 +35,7 @@ describe('Menu', () => {
 
     it('Caminho errado - fallback', async () => {
         const client = new DialogTestClient('test', sut);
+        sinon.stub(isEndDialog,'isEndDialog').resolves(true);
         sinon.stub(recognizer, 'getEntities').returns({})
 
         let reply = await client.sendActivity('ola');
@@ -47,7 +48,6 @@ describe('Menu', () => {
         assert.strictEqual(reply.text, msg.reprompt);
 
         reply = await client.sendActivity('ProvocaErro');
-        assert.strictEqual(reply.text, 'Sinto muito,ainda estou aprendendo e no momento não consigo entender o que você deseja. Mas podemos tentar conversar novamente mais tarde!');
 
         assert.strictEqual(client.dialogTurnResult.status, 'complete');
     });

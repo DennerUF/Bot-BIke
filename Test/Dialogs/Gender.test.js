@@ -1,13 +1,15 @@
 const { DialogTestClient, DialogTestLogger } = require('botbuilder-testing'); 
 const { Gender } = require('../../Dialogs/Gender/gender');
 const sinon = require('sinon');
-const msg = require('./TestData/genderData');
-const SearchBike = require('../../Helpers/searchBikes');
-const bikes = require('./TestData/bikes');
-const { BikeRecognizer } = require('../../Luis/BikeRecognizer');
+const msg = require('./../TestData/genderData');
+
+const bikes = require('./../TestData/bikes');
+
 const { ComponentDialog, DialogContext } = require('botbuilder-dialogs');
 const assert = require('assert');
 const recognizer = require('../../Helpers/getLuis')
+const isEndDialog = require('../../Helpers/isEndDialog');
+const filter = require('../../Helpers/filterBikes');
 
 
 describe('Teste dialogo Gender', () => {
@@ -15,7 +17,8 @@ describe('Teste dialogo Gender', () => {
 
     beforeEach(()=>{
         sut = new Gender();
-        sinon.stub(SearchBike.prototype,'search').resolves(bikes);
+        sinon.stub(filter,'filterBikes').returns(bikes);
+        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
     })
 
     afterEach(()=>{
@@ -51,7 +54,8 @@ describe('Teste dialogo Gender', () => {
         const client = new DialogTestClient('test', sut);
         sinon.restore();
         sinon.stub(recognizer, 'getEntities').returns({gender:[['Unissex']]});
-        sinon.stub(SearchBike.prototype,'search').resolves([]);
+        sinon.stub(filter,'filterBikes').returns([]);
+        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
         sinon.stub(DialogContext.prototype, 'replaceDialog').resolves({ status: 'waiting' });
 
         let reply = await client.sendActivity('');
@@ -63,7 +67,9 @@ describe('Teste dialogo Gender', () => {
 
     it('Caminho errado - fallback', async () => {
         const client = new DialogTestClient('test', sut);
+        sinon.restore();
         sinon.stub(recognizer,'getEntities').resolves({});
+        sinon.stub(isEndDialog,'isEndDialog').resolves(true);
 
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptGender);
@@ -75,7 +81,6 @@ describe('Teste dialogo Gender', () => {
         assert.strictEqual(reply.text, msg.repromptGender);
 
         reply = await client.sendActivity('ProvocaErro');
-        assert.strictEqual(reply.text, 'Sinto muito,ainda estou aprendendo e no momento não consigo entender o que você deseja. Mas podemos tentar conversar novamente mais tarde!');
 
         assert.strictEqual(client.dialogTurnResult.status, 'complete');
     });

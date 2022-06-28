@@ -3,10 +3,13 @@ const { Color } = require('../../Dialogs/Color/color');
 const sinon = require('sinon');
 const recognizer = require('../../Helpers/getLuis');
 const assert = require('assert');
-const msg = require('./TestData/colorData');
+const msg = require('./../TestData/colorData');
 const { ComponentDialog, DialogContext } = require('botbuilder-dialogs');
-const bikes = require('./TestData/bikes');
-const SearchBike = require('../../Helpers/searchBikes');
+const bikes = require('./../TestData/bikes');
+const isEndDialog = require('../../Helpers/isEndDialog');
+const filter = require('../../Helpers/filterBikes');
+
+
 //, {}, [new DialogTestLogger()]
 
 
@@ -15,17 +18,18 @@ describe('Teste dialogo Color', () => {
     let sut;
     beforeEach(() => {
         sut = new Color();
-        sinon.stub(SearchBike.prototype,'search').resolves(bikes);
-
-
+    
+        
     })
-
+    
     afterEach(() => {
         sinon.restore();
     })
     it('Caminho certo - escolhendo "Verde" sem prompt ', async () => {
         const client = new DialogTestClient('test', sut);
-
+        sinon.stub(filter,'filterBikes').returns(bikes);
+        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
+        
         sinon.stub(recognizer, 'getEntities').returns({ color: [['Verde']] })
         
         let reply = await client.sendActivity('ola');
@@ -38,6 +42,7 @@ describe('Teste dialogo Color', () => {
 
     it('Caminho certo - escolhendo com prompt "Verde"', async () => {
         const client = new DialogTestClient('test', sut);
+
         sinon.stub(recognizer, 'getEntities').returns({})
         
         let reply = await client.sendActivity('ola');
@@ -47,7 +52,8 @@ describe('Teste dialogo Color', () => {
         assert.strictEqual(reply.text, msg.promptColor);
 
         sinon.restore();
-        sinon.stub(SearchBike.prototype,'search').resolves(bikes);
+        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
+        sinon.stub(filter,'filterBikes').returns(bikes);
         sinon.stub(recognizer, 'getEntities').returns({ color: [['Verde']] });
         sinon.stub(ComponentDialog.prototype, 'beginDialog').resolves({ status: 'waiting' });
         
@@ -57,9 +63,11 @@ describe('Teste dialogo Color', () => {
 
     it('Caminho certo - filterBike não devolvendo nada ', async () => {
         const client = new DialogTestClient('test', sut);
+
         sinon.restore();
+        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
         sinon.stub(recognizer, 'getEntities').returns({ color: [['Verde']] });
-        sinon.stub(SearchBike.prototype,'search').resolves([]);
+        sinon.stub(filter,'filterBikes').returns([]);
         sinon.stub(DialogContext.prototype, 'replaceDialog').resolves({ status: 'waiting' });
 
         let reply = await client.sendActivity('ola');
@@ -71,6 +79,8 @@ describe('Teste dialogo Color', () => {
 
     it('Caminho errado - fallback', async () => {
         const client = new DialogTestClient('test', sut);
+        sinon.stub(isEndDialog,'isEndDialog').resolves(true);
+
         sinon.stub(recognizer, 'getEntities').returns({})
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, 'Qual a cor que você quer para a sua bicicleta? 🚲');
@@ -85,7 +95,6 @@ describe('Teste dialogo Color', () => {
         assert.strictEqual(reply.text, msg.repromptColor);
 
         reply = await client.sendActivity('ProvocaErro');
-        assert.strictEqual(reply.text, 'Sinto muito,ainda estou aprendendo e no momento não consigo entender o que você deseja. Mas podemos tentar conversar novamente mais tarde!');
 
         assert.strictEqual(client.dialogTurnResult.status, 'complete');
     });
