@@ -25,10 +25,6 @@ describe('Teste Helper getLuis', () => {
         assert.strictEqual(getLuis.getTopIntent({}), false);
     });
 
-    
-
-
-
 })
 
 

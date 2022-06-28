@@ -69,6 +69,7 @@ describe('Teste dialogo Type', () => {
     it('Caminho errado - entitie == falsa', async () => {
         const client = new DialogTestClient('test', sut);
         sinon.stub(recognizer, 'getEntities').returns(false);
+        sinon.stub(isEndDialog,'isEndDialog').resolves(true)
         let reply = await client.sendActivity('tipo');
         assert.strictEqual(reply.text, 'Boa Escolha! Vem comigo para selecionar a sua magrela🚲');
 

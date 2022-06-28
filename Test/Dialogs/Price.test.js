@@ -79,6 +79,7 @@ describe('Teste dialogo Price', () => {
     it('Caminho errado - entitie == falsa', async () => {
         const client = new DialogTestClient('test', sut);
         sinon.stub(recognizer, 'getEntities').returns(false);
+        sinon.stub(isEndDialog,'isEndDialog').resolves(true);
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptPrice);
 

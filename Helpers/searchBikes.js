@@ -7,7 +7,8 @@ class SearchBike {
      */
     async search() {
         try {
-            const { data } = await axios({ method: 'GET', url: `https://pb-bikes-api.herokuapp.com/bike/list` });
+            const { data } = await axios.get(`https://pb-bikes-api.herokuapp.com/bike/list`);
+            if(data.length <=0 ){throw new Error}
             return data;
         } catch (error) {
             if(error)
