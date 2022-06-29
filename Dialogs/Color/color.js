@@ -2,7 +2,7 @@ const { WaterfallDialog, ChoicePrompt, TextPrompt, ComponentDialog, DialogTurnSt
 
 const recognizer = require('../../Helpers/getLuis');
 const msg = require('./message');
-const is = require('../../Helpers/isEndDialog');
+const objIsEndDialog = require('../../Helpers/isEndDialog');
 const filter = require('../../Helpers/filterBikes');
 
 const { ShowBikes } = require('../ShowBikes/showBikes');
@@ -55,7 +55,7 @@ class Color extends ComponentDialog {
      * @returns {Promise<DialogTurnStatus>} start new dialog
      */
     async beginIntentFilter(stepContext) {
-        if (await is.isEndDialog(stepContext)) { return stepContext.endDialog(); }
+        if (await objIsEndDialog.isEndDialog(stepContext)) { return stepContext.endDialog(); }
         let bikes = await filter.filterBikes('color', stepContext.result);
         if (!bikes || bikes.length <= 0) {
             await stepContext.context.sendActivity(msg.messageError);

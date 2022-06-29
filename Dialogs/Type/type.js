@@ -2,7 +2,7 @@ const { WaterfallDialog, ChoicePrompt, ComponentDialog } = require('botbuilder-d
 
 const recognizer = require('../../Helpers/getLuis');
 const msg = require('./message');
-const is = require('../../Helpers/isEndDialog');
+const objIsEndDialog = require('../../Helpers/isEndDialog');
 const filter = require('../../Helpers/filterBikes');
 
 const { ShowBikes } = require('../ShowBikes/showBikes');
@@ -40,7 +40,7 @@ class Type extends ComponentDialog {
      * @returns {Promise<DialogTurnStatus>} start new dialog
      */
     async beginIntentFilter(stepContext) {
-        if (await is.isEndDialog(stepContext)) { return stepContext.endDialog(); }
+        if (await objIsEndDialog.isEndDialog(stepContext)) { return stepContext.endDialog(); }
         if (stepContext.result == 'menuDialog') { return stepContext.replaceDialog('MENU'); }
         let bikes = await filter.filterBikes('type', stepContext.result);
         if (!bikes || bikes.length <= 0) {
