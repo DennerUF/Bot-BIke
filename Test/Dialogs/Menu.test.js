@@ -8,35 +8,36 @@ const recognizer = require('../../Helpers/getLuis');
 const isEndDialog = require('../../Helpers/isEndDialog');
 
 describe('Menu', () => {
-    let sut;
-    beforeEach(()=>{
-        sut = new Menu();
-        
-        
+    let stubGetEntities, stubIsEndDialog, client;
+    beforeEach(() => {
+        const sut = new Menu();
+        client = new DialogTestClient('test', sut);
+
+        stubGetEntities = sinon.stub(recognizer, 'getEntities');
+        stubIsEndDialog = sinon.stub(isEndDialog, 'isEndDialog').resolves(false);
+
+
     })
 
-    afterEach(()=>{
+    afterEach(() => {
         sinon.restore();
     })
 
     it('Caminho certo - escolhendo "Tipo"', async () => {
-        const client = new DialogTestClient('test', sut);
-        sinon.stub(recognizer,'getEntities').returns({menu:[['Type']]});
-        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
-        
+        stubGetEntities.returns({ menu: [['Type']] });
+
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptMenu);
-        
+
         reply = await client.sendActivity('Tipo');
         sinon.stub(ComponentDialog.prototype, 'beginDialog').resolves({ status: 'waiting' });
-        
+
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
 
     it('Caminho errado - fallback', async () => {
-        const client = new DialogTestClient('test', sut);
-        sinon.stub(isEndDialog,'isEndDialog').resolves(true);
-        sinon.stub(recognizer, 'getEntities').returns({})
+        stubIsEndDialog.resolves(true);
+        stubGetEntities.returns({})
 
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptMenu);

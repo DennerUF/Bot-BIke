@@ -13,12 +13,14 @@ const filter = require('../../Helpers/filterBikes');
 
 
 describe('Teste dialogo Gender', () => {
-    let sut;
-
+    let stubGetEntities,stubFilter,stubIsEndDialog, client;
     beforeEach(()=>{
-        sut = new Gender();
-        sinon.stub(filter,'filterBikes').returns(bikes);
-        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
+        const sut = new Gender();
+        client = new DialogTestClient('test', sut);
+
+        stubGetEntities = sinon.stub(recognizer, 'getEntities');
+        stubFilter = sinon.stub(filter,'filterBikes').returns(bikes);
+        stubIsEndDialog = sinon.stub(isEndDialog,'isEndDialog').resolves(false);
     })
 
     afterEach(()=>{
@@ -26,8 +28,8 @@ describe('Teste dialogo Gender', () => {
     })
 
     it('Caminho certo - escolhendo "Unissex"', async () => {
-        const client = new DialogTestClient('test', sut);
-        sinon.stub(recognizer,'getEntities').resolves({gender:[['Unissex']]});
+        
+        stubGetEntities.returns({gender:[['Unissex']]});
         
         let reply = await client.sendActivity('');
         assert.strictEqual(reply.text, msg.promptGender);
@@ -39,9 +41,8 @@ describe('Teste dialogo Gender', () => {
     });
 
     it('Caminho certo - Ativando menu com opcao "Outro filtro" ', async () => {
-        const client = new DialogTestClient('test', sut);
         sinon.stub(DialogContext.prototype, 'replaceDialog').resolves({ status: 'waiting' });
-        sinon.stub(recognizer, 'getEntities').returns({anotherFilter:{}});
+        stubGetEntities.returns({anotherFilter:{}});
 
         let reply = await client.sendActivity('');
         assert.strictEqual(reply.text, msg.promptGender);
@@ -51,12 +52,9 @@ describe('Teste dialogo Gender', () => {
     });
 
     it('Caminho certo - filterBike não devolvendo nada ', async () => {
-        const client = new DialogTestClient('test', sut);
-        sinon.restore();
-        sinon.stub(recognizer, 'getEntities').returns({gender:[['Unissex']]});
-        sinon.stub(filter,'filterBikes').returns([]);
-        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
         sinon.stub(DialogContext.prototype, 'replaceDialog').resolves({ status: 'waiting' });
+        stubGetEntities.returns({gender:[['Unissex']]});
+        stubFilter.returns([]);
 
         let reply = await client.sendActivity('');
         assert.strictEqual(reply.text, msg.promptGender);
@@ -66,10 +64,8 @@ describe('Teste dialogo Gender', () => {
     });
 
     it('Caminho errado - fallback', async () => {
-        const client = new DialogTestClient('test', sut);
-        sinon.restore();
-        sinon.stub(recognizer,'getEntities').resolves({});
-        sinon.stub(isEndDialog,'isEndDialog').resolves(true);
+        stubGetEntities.returns({});
+        stubIsEndDialog.resolves(true);
 
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptGender);

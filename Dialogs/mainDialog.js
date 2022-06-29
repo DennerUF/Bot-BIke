@@ -10,7 +10,7 @@ const showBikes = new ShowBikes();
 
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
-const TEXT_PROMPT = 'textPrompt';
+
 class MainDialog extends ComponentDialog {
     constructor() {
         super('MainDialog');

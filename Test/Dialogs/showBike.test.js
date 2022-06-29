@@ -10,9 +10,13 @@ const { ShowBikes } = require('../../Dialogs/ShowBikes/showBikes');
 const card = require('../../Helpers/cardMaker');
 
 describe('Teste dialogo ShowBikes', () => {
-    let sut;
+    let sut,client,stubGetEntities,stubGetIntents;
     beforeEach(()=>{
         sut = new ShowBikes();
+        client = new DialogTestClient('test', sut,{bikes:bikes});
+
+        stubGetEntities = sinon.stub(recognizer,'getEntities').returns({});
+        stubGetIntents = sinon.stub(recognizer,'getTopIntent').returns({});
         sinon.stub(card,'fullCard').resolves(dataBike.fullcard);
         sinon.stub(card,'descriptionCard').resolves(dataBike.descriptionCard);
         
@@ -23,9 +27,6 @@ describe('Teste dialogo ShowBikes', () => {
     })
     
     it('Caminho certo - mostrando card Completo', async () => {
-        const client = new DialogTestClient('test', sut,{bikes:bikes});
-        sinon.stub(recognizer,'getEntities').resolves({});
-        sinon.stub(recognizer,'getTopIntent').resolves({});
 
         let reply = await client.sendActivity('ola');
         assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
@@ -36,8 +37,6 @@ describe('Teste dialogo ShowBikes', () => {
     
     it('Caminho certo - mostrando card com descricao', async () => {
         const client = new DialogTestClient('test', sut,{bikes:bikes,description: true });
-        sinon.stub(recognizer,'getEntities').resolves({});
-        sinon.stub(recognizer,'getTopIntent').resolves({});
 
         let reply = await client.sendActivity('ola');
         assert.notDeepStrictEqual(reply.text, dataBike.descriptionCard);
@@ -47,21 +46,18 @@ describe('Teste dialogo ShowBikes', () => {
     });
 
     it('Caminho certo - escolhendo "Ver Proxima opção de bicicleta"', async () => {
-        const client = new DialogTestClient('test', sut,{bikes:bikes});
-        sinon.stub(recognizer,'getEntities').resolves({});
-        sinon.stub(recognizer,'getTopIntent').resolves({});
 
         let reply = await client.sendActivity('ola');
         assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
         
         reply = await client.sendActivity('Ver Proxima opção');
         assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
+
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
     it('Caminho certo - escolhendo "Mais Informacoes sobre a bicicleta"', async () => {
-        const client = new DialogTestClient('test', sut,{bikes:bikes});
-        sinon.stub(recognizer,'getEntities').resolves({informacao:{}});
-        sinon.stub(recognizer,'getTopIntent').resolves({});
+        
+        stubGetEntities.returns({informacao:{}});
 
         let reply = await client.sendActivity('ola');
         assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
@@ -71,9 +67,8 @@ describe('Teste dialogo ShowBikes', () => {
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
     it('Caminho certo - escolhendo "Explorar outro filtro de pesquisa"', async () => {
-        const client = new DialogTestClient('test', sut,{bikes:bikes});
-        sinon.stub(recognizer,'getEntities').resolves({});
-        sinon.stub(recognizer,'getTopIntent').resolves('MENU');
+        
+        stubGetIntents.resolves('MENU');
         
         let reply = await client.sendActivity('ola');
         assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
@@ -85,8 +80,6 @@ describe('Teste dialogo ShowBikes', () => {
     });
     it('Caminho certo - escolhendo "Ver Proxima opção de bicicleta" Sem ter proxima opcao', async () => {
         const client = new DialogTestClient('test', sut,{bikes:dataBike.oneBike});
-        sinon.stub(recognizer,'getEntities').resolves({});
-        sinon.stub(recognizer,'getTopIntent').resolves({});
         
         let reply = await client.sendActivity('ola');
         assert.notDeepStrictEqual(reply.text, dataBike.fullcard);
@@ -95,12 +88,13 @@ describe('Teste dialogo ShowBikes', () => {
         
         reply = await client.sendActivity('Ver Proxima opção de bicicleta');
         assert.strictEqual(reply.text, dataBike.message);
+
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
     it('Caminho certo - intent e entitie igual false', async () => {
-        const client = new DialogTestClient('test', sut,{bikes:bikes});
-        sinon.stub(recognizer,'getEntities').resolves(false);
-        sinon.stub(recognizer,'getTopIntent').resolves(false);
+        
+        stubGetEntities.resolves(false);
+        stubGetIntents.resolves(false);
 
         let reply = await client.sendActivity('ola');
 

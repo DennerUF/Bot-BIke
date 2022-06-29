@@ -13,49 +13,46 @@ const assert = require('assert');
 
 
 describe('Teste dialogo Price', () => {
-    let sut;
-    beforeEach(()=>{
-        sut = new Price();
-        
+    let stubGetEntities, stubFilter, stubIsEndDialog, client;
+    beforeEach(() => {
+        const sut = new Price();
+        client = new DialogTestClient('test', sut);
+
+        stubGetEntities = sinon.stub(recognizer, 'getEntities');
+        stubFilter = sinon.stub(filter, 'filterBikes').returns(bikes);
+        stubIsEndDialog = sinon.stub(isEndDialog, 'isEndDialog').resolves(false);
+
     })
 
-    afterEach(()=>{
+    afterEach(() => {
         sinon.restore();
     })
     it('Caminho certo - escolhendo "Até R$ 500,00"', async () => {
-        const client = new DialogTestClient('test', sut);
-        sinon.stub(filter,'filterBikes').returns(bikes);
-        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
+        stubGetEntities.returns({ price: [{ priceMax: ['500'] }] });
 
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptPrice);
 
-        sinon.stub(recognizer,'getEntities').resolves({price:[{priceMax:['500']}]});
         sinon.stub(ComponentDialog.prototype, 'beginDialog').resolves({ status: 'waiting' });
         reply = await client.sendActivity('Até R$ 500,00');
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
     it('Caminho certo - escolhendo "De R$ 1500,00 até R$ 3000,00"', async () => {
-        const client = new DialogTestClient('test', sut);
-        sinon.stub(filter,'filterBikes').returns(bikes);
-        sinon.stub(isEndDialog,'isEndDialog').resolves(false); 
+        stubGetEntities.resolves({ price: [{ priceMin: ['1500'] }, { priceMax: ['3000'] }] });
+
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptPrice);
 
-        sinon.stub(recognizer,'getEntities').resolves({price:[{priceMin:['1500']},{priceMax:['3000']}]});
         sinon.stub(ComponentDialog.prototype, 'beginDialog').resolves({ status: 'waiting' });
         reply = await client.sendActivity('De R$ 1500,00 até R$ 3000,00');
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
 
     it('Caminho certo - filterBike não devolvendo nada ', async () => {
-        const client = new DialogTestClient('test', sut);
-
-        sinon.restore();
-        sinon.stub(recognizer, 'getEntities').returns({price:[{priceMax:['500']}]});
-        sinon.stub(filter,'filterBikes').returns([]);
-        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
+        stubGetEntities.returns({ price: [{ priceMax: ['500'] }] });
+        stubFilter.returns([]);
         sinon.stub(DialogContext.prototype, 'replaceDialog').resolves({ status: 'waiting' });
+
         let reply = await client.sendActivity('Preco');
         assert.strictEqual(reply.text, msg.promptPrice);
 
@@ -64,11 +61,8 @@ describe('Teste dialogo Price', () => {
     });
 
     it('Caminho certo - Ativando menu com opcao "Outro filtro" ', async () => {
-        const client = new DialogTestClient('test', sut);
         sinon.stub(DialogContext.prototype, 'replaceDialog').resolves({ status: 'waiting' });
-        sinon.stub(recognizer, 'getEntities').returns({anotherFilter:{}});
-        sinon.stub(filter,'filterBikes').returns(bikes);
-        sinon.stub(isEndDialog,'isEndDialog').resolves(false);
+        stubGetEntities.returns({ anotherFilter: {} });
 
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptPrice);
@@ -77,9 +71,9 @@ describe('Teste dialogo Price', () => {
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
     it('Caminho errado - entitie == falsa', async () => {
-        const client = new DialogTestClient('test', sut);
-        sinon.stub(recognizer, 'getEntities').returns(false);
-        sinon.stub(isEndDialog,'isEndDialog').resolves(true);
+        stubGetEntities.returns(false);
+        stubIsEndDialog.resolves(true);
+
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptPrice);
 
@@ -96,9 +90,10 @@ describe('Teste dialogo Price', () => {
 
 
     it('Caminho errado - fallback', async () => {
-        const client = new DialogTestClient('test', sut);
-        sinon.stub(recognizer, 'getEntities').returns({});
-        sinon.stub(isEndDialog,'isEndDialog').resolves(true);
+
+        stubGetEntities.returns({});
+        stubIsEndDialog.resolves(true);
+        
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptPrice);
 
