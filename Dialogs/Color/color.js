@@ -82,13 +82,6 @@ class Color extends ComponentDialog {
         return true;
     }
 
-
-
-
-
-
-
-
 }
 
 module.exports.Color = Color;
