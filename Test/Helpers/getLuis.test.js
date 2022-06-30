@@ -1,10 +1,9 @@
-const { DialogTestClient, DialogTestLogger } = require('botbuilder-testing');
-const sinon = require('sinon');
+
 const assert = require('assert');
 
 const getLuis = require('../../Helpers/getLuis');
 const getLuisData = require('./../TestData/getLuisData'); 
-const { entities } = require('./../TestData/getLuisData');
+
 
 //, {}, [new DialogTestLogger()]
 

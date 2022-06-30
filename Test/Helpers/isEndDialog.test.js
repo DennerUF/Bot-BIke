@@ -1,8 +1,6 @@
-const { ComponentDialog, DialogContext, Dialog, WaterfallStepContext, ActivityPrompt } = require('botbuilder-dialogs');
 const sinon = require('sinon');
 const assert = require('assert');
 const isEndDialog = require('../../Helpers/isEndDialog');
-const { Context } = require('mocha');
 const { TurnContext } = require('botbuilder');
 
 

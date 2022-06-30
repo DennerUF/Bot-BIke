@@ -8,8 +8,9 @@ const filterData = require('../TestData/filterBikesData');
 const SearchBike = require('../../Helpers/searchBikes');
 
 describe('Teste Helper filterBike', async () => {
+    let stubSearchBike;
     beforeEach(() => {
-        sinon.stub(SearchBike.prototype,'search').resolves(bikes);
+        stubSearchBike = sinon.stub(SearchBike.prototype,'search').resolves(bikes);
     })
     
     afterEach(() => {
@@ -29,8 +30,7 @@ describe('Teste Helper filterBike', async () => {
         assert.deepStrictEqual(await filter.filterBikes('price',{min:'500',max:'1500'}),filterData.bikesPriceDe500Ate1500);
     });
     it('Caminho Errado - SearchBikes não devolve bikes ', async () => {
-        sinon.restore();
-        sinon.stub(SearchBike.prototype,'search').resolves([]);
+        stubSearchBike.resolves([]);
         assert.deepStrictEqual(await filter.filterBikes('color','Verde'),false);
     });
 

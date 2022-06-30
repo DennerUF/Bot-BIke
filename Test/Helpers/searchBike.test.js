@@ -7,16 +7,21 @@ const assert = require('assert');
 
 
 describe('Teste Helper searchBike', () => {
+    let stubAxios;
+    beforeEach(() => {
+        stubAxios = sinon.stub(axios,'get');
+    })
+
     afterEach(() => {
         sinon.restore();
     })
 
     it('Caminho certo - Retorno requisição normal ', async() => {
-        sinon.stub(axios,'get').resolves({data:bikes});
+        stubAxios.resolves({data:bikes});
         assert.deepStrictEqual(await SearchBike.prototype.search(),bikes);
     })
     it('Caminho errado - Retorno requisição [] ', async() => {
-        sinon.stub(axios,'get').resolves({data:[]});
+        stubAxios.resolves({data:[]});
         assert.deepStrictEqual(await SearchBike.prototype.search(),false);
     })
 })
