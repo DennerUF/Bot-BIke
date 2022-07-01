@@ -28,12 +28,11 @@ class ShowBikes extends ComponentDialog {
      */
     async showBike(stepContext) {
         stepContext.values.bikes = stepContext.options.bikes;
-        const bike = stepContext.options.bikes[0];
-
+        const bikes = stepContext.options.bikes;
         if (stepContext.options.description) {
-            await stepContext.context.sendActivity({ attachments: [card.descriptionCard(bike)] });
+            await stepContext.context.sendActivity({ attachments: [card.descriptionCard(bikes[0], bikes.length)] });
         } else {
-            await stepContext.context.sendActivity({ attachments: [card.fullCard(bike)] });
+            await stepContext.context.sendActivity({ attachments: [card.fullCard(bikes[0], bikes.length)] });
         }
         return stepContext.prompt(TEXT_PROMPT);
     }
@@ -56,13 +55,16 @@ class ShowBikes extends ComponentDialog {
         } else if (intent == 'MENU') {
             return stepContext.replaceDialog('MENU');
         } else if (entitie.informacao) {
-            return stepContext.replaceDialog(SHOWBIKES_DIALOG, { bikes: stepContext.values.bikes, description: true });
+            return stepContext.replaceDialog(SHOWBIKES_DIALOG, { bikes: bikes, description: true })
         } else if (bikes.length > 1) {
-            stepContext.values.bikes.shift();
-            return stepContext.replaceDialog(SHOWBIKES_DIALOG, { bikes: stepContext.values.bikes });
+            bikes.shift();
+            return stepContext.replaceDialog(SHOWBIKES_DIALOG, { bikes: bikes });
         }
         await stepContext.context.sendActivity(msg.message);
         return stepContext.replaceDialog('MENU');
+
+
+
 
     }
 
