@@ -10,9 +10,16 @@ describe('Teste Helper cardMaker', () => {
     it('Caminho certo - Passando dados completos para card.fullCard ', async () => {
         assert.deepStrictEqual(card.fullCard(bikes[0]), cardData.fullcard);
     });
+    it('Caminho certo - Passando dados completos para card.descriptionCard ', async () => {
+        assert.deepStrictEqual(card.descriptionCard(bikes[0]), cardData.descriptionCard);
+    });
 
-    it('Caminho certo - Passando dados completos para card.descriptionCard. ', async () => {
-        assert.deepStrictEqual(card.descriptionCard(bikes[0]),cardData.descriptionCard);
+    it('Caminho certo - Passando apenas 1 bicicleta para fullCard ', async () => {
+        assert.deepStrictEqual(card.fullCard(bikes[0],1), cardData.fullcardNoNext);
+    });
+
+    it('Caminho certo - Passando apenas 1 bicicleta para descriptionCard. ', async () => {
+        assert.deepStrictEqual(card.descriptionCard(bikes[0],1),cardData.descriptionCardNoNext);
     });
 
 })

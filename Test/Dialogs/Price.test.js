@@ -28,7 +28,7 @@ describe('Teste dialogo Price', () => {
         sinon.restore();
     })
     it('Caminho certo - escolhendo "Até R$ 500,00"', async () => {
-        stubGetEntities.returns({ price: [{ priceMax: ['500'] }] });
+        stubGetEntities.returns({ price: [{ priceMax: ['500'] }], number:[500] });
 
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptPrice);
@@ -38,7 +38,7 @@ describe('Teste dialogo Price', () => {
         assert.strictEqual(client.dialogTurnResult.status, 'waiting');
     });
     it('Caminho certo - escolhendo "De R$ 1500,00 até R$ 3000,00"', async () => {
-        stubGetEntities.resolves({ price: [{ priceMin: ['1500'] }, { priceMax: ['3000'] }] });
+        stubGetEntities.resolves({ price: [{ priceMin: ['1500'] }, { priceMax: ['3000'] }], number:[1500,3000] });
 
         let reply = await client.sendActivity('ola');
         assert.strictEqual(reply.text, msg.promptPrice);
@@ -49,7 +49,7 @@ describe('Teste dialogo Price', () => {
     });
 
     it('Caminho certo - filterBike não devolvendo nada ', async () => {
-        stubGetEntities.returns({ price: [{ priceMax: ['500'] }] });
+        stubGetEntities.returns({ price: [{ priceMax: ['500'] }], number:[500] });
         stubFilter.returns([]);
         sinon.stub(DialogContext.prototype, 'replaceDialog').resolves({ status: 'waiting' });
 

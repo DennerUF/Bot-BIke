@@ -18,14 +18,15 @@ describe('Teste DialogBot', () => {
         assert.throws(() => {
             new DialogBot();
         })
-
     });
+
     it('Caminho errado - Apenas conversationState como parametro na classe DialogBot ', async () => {
 
         assert.throws(() => {
             new DialogBot(new ConversationState(memoryStorage));
         })
     });
+    
     it('Caminho errado - Apenas conversationState e userState como parametro na classe DialogBot ', async () => {
 
         assert.throws(() => {
