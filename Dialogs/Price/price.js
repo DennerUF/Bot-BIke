@@ -49,6 +49,7 @@ class Price extends ComponentDialog {
     }
     /**
      * Validates 'chooseFilterPrice' response with entities from LUIS. 
+     * Organize LUIS values
      * And counts the amount of wrong answers from the user, 
      * After three errors, adds "finishDialog" to 'stepContext.recognized.value' signaling to the prompt method that the dialog must be closed
      * @param {TurnContext} stepContext Dialog Context 
@@ -67,10 +68,19 @@ class Price extends ComponentDialog {
             stepContext.recognized.value = 'finishDialog';
             return true;
         }
-        if(entitie.price.length >1 ){
-            stepContext.recognized.value =  {min:entitie.price[0]['priceMin'][0],max:entitie.price[1]['priceMax'][0]} ;
+
+        if(entitie.price.length > 1 ){
+            let prices = Object.assign({},entitie.price[0], entitie.price[1]);
+            let keys = Object.keys(prices);
+            prices[keys[0]] = entitie.number[0];
+            prices[keys[2]] = entitie.number[1];
+            stepContext.recognized.value =  {min: prices['priceMin'],max:prices['priceMax']} ;
         }else{
-            stepContext.recognized.value = entitie.price[0]; 
+            let prices = Object.assign({},entitie.price[0])
+            console.log(prices)
+            let keys = Object.keys(prices);
+            prices[keys[0]] = entitie.number[0];
+            stepContext.recognized.value = prices;
         }
 
         return true;

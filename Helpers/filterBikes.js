@@ -11,7 +11,7 @@ module.exports = {
  */
     async filterBikes(filterCategory, value) {
         const bikes = await apiService.search();
-        if (!bikes|| bikes.length <= 0) { return false }
+        if (!bikes || bikes.length <= 0) { return false }
         if (filterCategory == 'price') {
             if (value.min && value.max) {
                 return bikes.filter((bike) => {
