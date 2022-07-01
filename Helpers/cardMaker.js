@@ -25,11 +25,7 @@ module.exports = {
      */
     descriptionCard: (bike,length) => {
         return CardFactory.heroCard(
-            `${bike.name}`, `${bike.description}`, CardFactory.images([`${bike.image}`]),
-            length <= 1
-            ? ['Explorar outro filtro de pesquisa', 'Encerrar']
-            : ['Ver Proxima opcao de bicicleta', 'Explorar outro filtro de pesquisa', 'Encerrar']
-            
+            `${bike.name}`, `${bike.description}`, CardFactory.images([`${bike.image}`])
         );
     },
 
