@@ -51,7 +51,7 @@ class MainDialog extends ComponentDialog {
                 await stepContext.context.sendActivity('Encontramos um erro. Tente novamente');
                 return stepContext.endDialog();
             }
-            return stepContext.beginDialog('MENU');
+            return stepContext.beginDialog(intent);
         } else if (stepContext.context._activity.type == 'conversationUpdate') {
             return stepContext.beginDialog('MENU');
         }
