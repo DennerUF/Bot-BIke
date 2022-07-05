@@ -59,5 +59,6 @@ adapter.onTurnError = async (context, error) => {
 };
 
 server.post('/api/messages', async (req, res) => {
+    console.log('entrou aqui')
     await adapter.process(req, res, (context) => bot.run(context));
 });
