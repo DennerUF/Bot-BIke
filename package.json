@@ -20,6 +20,7 @@
     "botbuilder": "^4.16.0",
     "botbuilder-ai": "^4.16.0",
     "botbuilder-dialogs": "^4.16.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "restify": "^8.6.1"
   },
