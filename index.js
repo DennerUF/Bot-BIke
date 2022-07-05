@@ -1,4 +1,5 @@
 require('dotenv').config();
+const cors = require('cors');
 const restify = require('restify');
 const {
     CloudAdapter,
