@@ -44,10 +44,12 @@ class MainDialog extends ComponentDialog {
      * @returns {Promise<DialogTurnStatus>} DialogTurnStatus
      */
     async startDialog(stepContext) {
-
+        console.log('entrou startDialog')
         if (stepContext.context._activity.type != 'conversationUpdate') {
+            console.log('entrou startDialog if')
             const intent = recognizer.getTopIntent(stepContext.context.luisResult);
             if(!intent){
+                console.log('entrou startDialog if if')
                 await stepContext.context.sendActivity('Encontramos um erro. Tente novamente');
                 return stepContext.endDialog();
             }
