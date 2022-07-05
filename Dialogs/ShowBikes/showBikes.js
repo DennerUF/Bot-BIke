@@ -79,7 +79,7 @@ class ShowBikes extends ComponentDialog {
             return stepContext.replaceDialog('MENU');
         } else if (intent == 'MENU') {
             return stepContext.replaceDialog('MENU');
-        } else if (entitie.informacao) {
+        } else if (entitie.information) {
             return stepContext.replaceDialog(SHOWBIKES_DIALOG, { bikes: bikes, description: {description: true} })
         } else if (bikes.length > 1) {
             bikes.shift();

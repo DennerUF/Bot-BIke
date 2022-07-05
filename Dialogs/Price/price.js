@@ -77,7 +77,6 @@ class Price extends ComponentDialog {
             stepContext.recognized.value =  {min: prices['priceMin'],max:prices['priceMax']} ;
         }else{
             let prices = Object.assign({},entitie.price[0])
-            console.log(prices)
             let keys = Object.keys(prices);
             prices[keys[0]] = entitie.number[0];
             stepContext.recognized.value = prices;
