@@ -13,7 +13,7 @@ const GenderDialog = new Gender();
 const { Price } = require('../Price/price');
 const PriceDialog = new Price();
 
-
+console.log('entrou menu ')
 const MENU_DIALOG = 'MENU';
 const CHOOSE_FILTER = 'CHOOSE_FILTER';
 class Menu extends ComponentDialog {
@@ -39,6 +39,7 @@ class Menu extends ComponentDialog {
      * @returns {Promise<ChoicePrompt>} filter categories
      */
     async chooseFilter(stepContext) {
+        console.log('entrou menu chooseFilter')
         return stepContext.prompt(CHOOSE_FILTER, msg.choose);
     }
     /**
