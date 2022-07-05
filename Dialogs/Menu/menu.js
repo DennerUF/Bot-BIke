@@ -13,7 +13,7 @@ const GenderDialog = new Gender();
 const { Price } = require('../Price/price');
 const PriceDialog = new Price();
 
-
+console.log('entrou menu ')
 const MENU_DIALOG = 'MENU';
 const CHOOSE_FILTER = 'CHOOSE_FILTER';
 class Menu extends ComponentDialog {
@@ -39,7 +39,11 @@ class Menu extends ComponentDialog {
      * @returns {Promise<ChoicePrompt>} filter categories
      */
     async chooseFilter(stepContext) {
-        return stepContext.prompt(CHOOSE_FILTER, msg.choose);
+        console.log('entrou menu chooseFilter')
+        //await stepContext.prompt(CHOOSE_FILTER, msg.choose);
+        const v = await stepContext.context.sendActivity('test');
+        console.log("v")
+        return v;
     }
     /**
      * Second waterfall step. Starts dialog of the chosen category

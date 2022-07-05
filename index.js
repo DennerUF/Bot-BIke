@@ -1,4 +1,5 @@
 require('dotenv').config();
+const cors = require('cors');
 const restify = require('restify');
 const {
     CloudAdapter,
@@ -58,5 +59,10 @@ adapter.onTurnError = async (context, error) => {
 };
 
 server.post('/api/messages', async (req, res) => {
+    console.log('entrou aqui')
+    console.log('res');
+    console.log(res);
+    console.log('req');
+    console.log(req);
     await adapter.process(req, res, (context) => bot.run(context));
 });
