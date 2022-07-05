@@ -40,7 +40,8 @@ class Menu extends ComponentDialog {
      */
     async chooseFilter(stepContext) {
         console.log('entrou menu chooseFilter')
-        const v = await stepContext.prompt(CHOOSE_FILTER, msg.choose);
+        //await stepContext.prompt(CHOOSE_FILTER, msg.choose);
+        const v = await stepContext.context.sendActivity('test');
         console.log("v")
         return v;
     }
