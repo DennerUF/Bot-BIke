@@ -40,7 +40,9 @@ class Menu extends ComponentDialog {
      */
     async chooseFilter(stepContext) {
         console.log('entrou menu chooseFilter')
-        return stepContext.prompt(CHOOSE_FILTER, msg.choose);
+        const v = await stepContext.prompt(CHOOSE_FILTER, msg.choose);
+        console.log("v")
+        return v;
     }
     /**
      * Second waterfall step. Starts dialog of the chosen category
