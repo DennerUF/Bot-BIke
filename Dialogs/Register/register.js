@@ -4,8 +4,9 @@ const recognizer = require('../../Helpers/getLuis');
 
 const cepValidator = require('../../Helpers/cepValidator');
 const msg = require('./message');
+const ChangePurchaseData = require('../ChangePurchaseData/changePurchaseData');
+const dialogChange = new ChangePurchaseData();
 
-const CONFIRMDATA_CONFIRMPROMPT =  'CONFIRMDATA_CONFIRMPROMPT';
 const NUMBERHOUSE_NUMBERPROMPT = 'NUMBERHOUSE_NUMBERPROMPT';
 const CPF_PROMPT = 'CPF_NUMBERPROMPT';
 const CEP_PROMPT = 'CEP_NUMBER_PROMPT';
@@ -20,13 +21,13 @@ class Register extends ComponentDialog {
     constructor() {
         super(REGISTRATION_DIALOG);
         this.addDialog(new TextPrompt(CITY_TEXTPROMPT))
+            .addDialog(dialogChange)
             .addDialog(new TextPrompt(NAME_TEXTPROMPT))
             .addDialog(new TextPrompt(DISTRICT_TEXTPROMPT))
             .addDialog(new TextPrompt(ADDRESS_TEXTPROMPT))
             .addDialog(new TextPrompt(COMPLEMENT_TEXTPROMPT))
             .addDialog(new NumberPrompt(NUMBERHOUSE_NUMBERPROMPT))
             .addDialog(new NumberPrompt(CPF_PROMPT))
-            .addDialog(new ConfirmPrompt(CONFIRMDATA_CONFIRMPROMPT))
             .addDialog(new NumberPrompt(FONE_PROMPT))
             .addDialog(new NumberPrompt(CEP_PROMPT))
             .addDialog(new WaterfallDialog(REGISTRATION_DIALOG, [
@@ -39,8 +40,7 @@ class Register extends ComponentDialog {
                 this.complementStep.bind(this),
                 this.nameStep.bind(this),
                 this.cpfStep.bind(this),
-                this.foneStep.bind(this),
-                this.finishStep.bind(this)
+                this.foneStep.bind(this)
             ]));
 
         this.initialDialogId = REGISTRATION_DIALOG;
@@ -124,17 +124,10 @@ class Register extends ComponentDialog {
     async foneStep(stepContext) {
         const entitie = recognizer.getEntities(stepContext.context.luisResult);
         stepContext.values.purchaseData.fone = entitie.number[0] || stepContext.result;
-        await stepContext.context.sendActivity(msg.messageConfirm);
-        await stepContext.context.sendActivity(msg.purchaseData(stepContext.values.purchaseData));
-        return stepContext.prompt(CONFIRMDATA_CONFIRMPROMPT, msg.promptConfirm);
+        
+        return stepContext.replaceDialog('CHANGEDATA',{data: stepContext.values.purchaseData});
     }
 
-    async finishStep(stepContext) {
-       if(stepContext.result){
-        await stepContext.context.sendActivity(msg.completedPurchase);
-        return stepContext.endDialog();
-       }
-    }
 
     
 }
