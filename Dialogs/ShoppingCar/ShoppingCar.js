@@ -3,7 +3,7 @@ const { WaterfallDialog, ChoicePrompt, ComponentDialog, TextPrompt, ConfirmPromp
 const recognizer = require('../../Helpers/getLuis');
 const msg = require('./message');
 const objIsEndDialog = require('../../Helpers/isEndDialog');
-const { Register } = require('../Register/Register');
+const { Register } = require('../Register/register');
 const register = new Register();
 
 const SHOPPINGCAR_DIALOG = 'SHOPPINGCAR';
