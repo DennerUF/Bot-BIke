@@ -6,15 +6,15 @@ module.exports = {
     messageConfirm: 'Para finalizarmos a compra, confirme os seus dados!',
     purchaseData: (data) => {
         return `
-        Cep: ${data.cep}
-        Cidade: ${data.city}
-        Bairro: ${data.district}
-        Endereço: ${data.address}
-        Número: ${data.numberHouse}
-        Complemento: ${data.complement}
-        Nome: ${data.name}
-        CPF: ${data.cpf}
-        Telefone: ${data.fone}
+        1. Cep: ${data.cep}
+        2. Cidade: ${data.cidade}
+        3. Bairro: ${data.bairro}
+        4. Endereço: ${data.endereco}
+        5. Número: ${data.numero}
+        6. Complemento: ${data.complemento}
+        7. Nome: ${data.nome}
+        8. CPF: ${data.cpf}
+        9. Telefone: ${data.telefone}
 
     `
     },

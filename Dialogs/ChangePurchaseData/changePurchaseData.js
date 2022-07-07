@@ -4,8 +4,6 @@ const objIsEndDialog = require('../../Helpers/isEndDialog');
 const recognizer = require('../../Helpers/getLuis');
 const CONFIRMDATA_CONFIRMPROMPT =  'CONFIRMDATA_CONFIRMPROMPT';
 const msg = require('./message');
-const CONFIRM_BUY = 'CONFIRM_BUY';
-const NEXTSTEP_CHOOSEPROMPT = 'CHOOSENEXTSTEP';
 const START_TEXTPROMPT = 'START_TEXTPROMPT';
 const CHANGE_TEXTPROMPT = 'CHANGE_TEXTPROMPT';
 const ChangePurchaseData_DIALOG = 'CHANGEDATA';
@@ -52,7 +50,7 @@ class ChangePurchaseData extends ComponentDialog {
             stepContext.values.purchaseData.cpf = entitie.CPF[0] || stepContext.result;
             return stepContext.replaceDialog('CHANGEDATA',{data: stepContext.values.purchaseData});
         }else if(entitie.CEP){
-            stepContext.values.purchaseData.cpf = entitie.CEP[0] || stepContext.result;
+            stepContext.values.purchaseData.cep = entitie.CEP[0] || stepContext.result;
             return stepContext.replaceDialog('CHANGEDATA',{data: stepContext.values.purchaseData});
         }
         stepContext.values.purchaseData[stepContext.values.data] = stepContext.result;

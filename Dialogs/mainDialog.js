@@ -45,17 +45,19 @@ class MainDialog extends ComponentDialog {
      */
     async startDialog(stepContext) {
 
-        if (stepContext.context._activity.type != 'conversationUpdate') {
+        if(stepContext.context.luisResult){
             const intent = recognizer.getTopIntent(stepContext.context.luisResult);
-            if(!intent){
+            if (!intent) {
                 await stepContext.context.sendActivity('Encontramos um erro. Tente novamente');
                 return stepContext.endDialog();
+            }else if(intent != 'NONE'){
+                return stepContext.beginDialog(intent);
+            }else{
+                return stepContext.continueDialog();
             }
-            return stepContext.beginDialog(intent);
-        } else if (stepContext.context._activity.type == 'conversationUpdate') {
-            return stepContext.beginDialog('MENU');
         }
-        return stepContext.continueDialog();
+        return stepContext.beginDialog('MENU');
+        
 
     }
     /**

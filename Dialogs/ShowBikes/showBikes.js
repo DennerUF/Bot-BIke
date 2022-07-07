@@ -53,7 +53,7 @@ class ShowBikes extends ComponentDialog {
             if(stepContext.result){
                 return stepContext.replaceDialog('SHOPPINGCAR', { bike: stepContext.values.bikes[0] })
             }
-        const msgPrompt = stepContext.values.bikes.length <= 2
+        const msgPrompt = stepContext.values.bikes.length <= 1
         ? msg.nextStepPromptNoOption
         : msg.nextStepPrompt
         return stepContext.prompt(NEXTSTEP_CHOOSEPROMPT, msgPrompt);
@@ -77,7 +77,7 @@ class ShowBikes extends ComponentDialog {
         if (!entitie || !intent) {
             await stepContext.context.sendActivity(msg.erro);
             return stepContext.replaceDialog('MENU');
-        } else if (intent == 'MENU') {
+        } else if (intent == 'MENU' || entitie.anotherFilter) {
             return stepContext.replaceDialog('MENU');
         } else if (entitie.information) {
             return stepContext.replaceDialog(SHOWBIKES_DIALOG, { bikes: bikes, description: {description: true} })

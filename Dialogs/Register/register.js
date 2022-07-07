@@ -48,16 +48,10 @@ class Register extends ComponentDialog {
     }
     async startDialog(stepContext) {
         stepContext.values.purchaseData = stepContext.options;
-        if (stepContext.values.purchaseData.cep) {
-            return stepContext.next();
-        }
 
         return stepContext.prompt(CEP_PROMPT, msg.promptCEP);
     }
     async cepStep(stepContext) {
-        if (stepContext.values.purchaseData.city) {
-            return stepContext.next();
-        }
         const entitie = recognizer.getEntities(stepContext.context.luisResult);
         if (!entitie || !entitie.CEP) {
             stepContext.values.purchaseData.cep = '*';
@@ -70,49 +64,49 @@ class Register extends ComponentDialog {
             return stepContext.prompt(CITY_TEXTPROMPT, msg.promptCity);
         }
         stepContext.values.purchaseData.cep = cep;
-        stepContext.values.purchaseData.city = resultValidation.city;
-        stepContext.values.purchaseData.district = resultValidation.district;
-        stepContext.values.purchaseData.address = resultValidation.address;
+        stepContext.values.purchaseData.cidade = resultValidation.city;
+        stepContext.values.purchaseData.bairro = resultValidation.district;
+        stepContext.values.purchaseData.endereco = resultValidation.address;
         return stepContext.next();
     }
 
     async cityStep(stepContext){
         if (stepContext.values.purchaseData.cep !== '*') {
-            return stepContext.next(true);
+            return stepContext.next();
         }
-        stepContext.values.purchaseData.city = stepContext.result;
+        stepContext.values.purchaseData.cidade = stepContext.result;
         return stepContext.prompt(DISTRICT_TEXTPROMPT, msg.promptDistrict);
     }
 
     async districtStep(stepContext){
-        if (stepContext.options) {
-            return stepContext.next(true);
+        if (stepContext.values.purchaseData.cep !== '*') {
+            return stepContext.next();
         }
-        stepContext.values.purchaseData.district = stepContext.result;
+        stepContext.values.purchaseData.bairro = stepContext.result;
         return stepContext.prompt(ADDRESS_TEXTPROMPT, msg.promptAddress);
     }
 
     async addressStep(stepContext){
         if (stepContext.values.purchaseData.cep === '*') {
-            stepContext.values.purchaseData.address = stepContext.result;
+            stepContext.values.purchaseData.endereco = stepContext.result;
         }
         return stepContext.prompt(NUMBERHOUSE_NUMBERPROMPT, msg.promptNumberHouse);
     }
 
     async numberHouseStep(stepContext){
         const entitie = recognizer.getEntities(stepContext.context.luisResult);
-        stepContext.values.purchaseData.numberHouse = entitie.number[0] || stepContext.result;
+        stepContext.values.purchaseData.numero = entitie.number[0] || stepContext.result;
         return stepContext.prompt(COMPLEMENT_TEXTPROMPT, msg.promptComplement);
 
     }
     async complementStep(stepContext){
-        stepContext.values.purchaseData.complement = stepContext.result;
+        stepContext.values.purchaseData.complemento = stepContext.result;
         return stepContext.prompt(NAME_TEXTPROMPT, msg.promptName);
 
     }
 
     async nameStep(stepContext) {
-        stepContext.values.purchaseData.name = stepContext.result;
+        stepContext.values.purchaseData.nome = stepContext.result;
         return stepContext.prompt(CPF_PROMPT, msg.promptCPF);
     }
 
@@ -123,7 +117,7 @@ class Register extends ComponentDialog {
     }
     async foneStep(stepContext) {
         const entitie = recognizer.getEntities(stepContext.context.luisResult);
-        stepContext.values.purchaseData.fone = entitie.number[0] || stepContext.result;
+        stepContext.values.purchaseData.telefone = entitie.number[0] || stepContext.result;
         
         return stepContext.replaceDialog('CHANGEDATA',{data: stepContext.values.purchaseData});
     }

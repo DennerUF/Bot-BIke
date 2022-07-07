@@ -21,13 +21,13 @@ module.exports = {
                 })
             } else if (value['priceMin']) {
                 return bikes.filter((bike) => {
-                    if (bike[filterCategory] > parseFloat(value['priceMin'][0])) {
+                    if (bike[filterCategory] > parseFloat(value['priceMin'])) {
                         return bike;
                     }
                 })
             } else {
                 return bikes.filter((bike) => {
-                    if (bike[filterCategory] < parseFloat(value['priceMax'][0])) {
+                    if (bike[filterCategory] < parseFloat(value['priceMax'])) {
                         return bike;
                     }
                 })

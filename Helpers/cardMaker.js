@@ -13,8 +13,8 @@ module.exports = {
         \nPreço:R$ ${bike.price}`,
             CardFactory.images([`${bike.image}`]),
             length <= 1
-            ? ['Mais Informacoes sobre a bicicleta', 'Explorar outro filtro de pesquisa']
-            : ['Mais Informacoes sobre a bicicleta', 'Ver Proxima opção de bicicleta', 'Explorar outro filtro de pesquisa']
+            ? ['Mais Informações sobre a bicicleta', 'Explorar outro filtro de pesquisa']
+            : ['Mais Informações sobre a bicicleta', 'Ver Próxima opção de bicicleta', 'Explorar outro filtro de pesquisa']
             
         );
     },
