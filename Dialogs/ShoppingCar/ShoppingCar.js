@@ -5,6 +5,7 @@ const msg = require('./message');
 const objIsEndDialog = require('../../Helpers/isEndDialog');
 const { Register } = require('../Register/register');
 const register = new Register();
+const Cart = require('../../DataBase/modelCart');
 
 const SHOPPINGCAR_DIALOG = 'SHOPPINGCAR';
 const PAYMENTMETHOD_CHOICEPROMPT = 'PAYMENTMETHOD_CHOICEPROMPT';
@@ -31,6 +32,13 @@ class ShoppingCar extends ComponentDialog {
     }
 
     async continueBuy(stepContext) {
+        const searchDB = await Cart.find({id: stepContext.context._activity.conversation.id});
+        if(searchDB == []){
+            await Cart.create();
+            
+            
+        }
+        
         if (!stepContext.values.bike) {
             stepContext.values.bike = [];
         }
