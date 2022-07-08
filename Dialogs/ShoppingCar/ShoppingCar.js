@@ -5,7 +5,8 @@ const msg = require('./message');
 const objIsEndDialog = require('../../Helpers/isEndDialog');
 const { Register } = require('../Register/register');
 const register = new Register();
-const Cart = require('../../DataBase/modelCart');
+
+const dataBase = require('../../DataBase/actionsDB'); 
 
 const SHOPPINGCAR_DIALOG = 'SHOPPINGCAR';
 const PAYMENTMETHOD_CHOICEPROMPT = 'PAYMENTMETHOD_CHOICEPROMPT';
@@ -32,18 +33,17 @@ class ShoppingCar extends ComponentDialog {
     }
 
     async continueBuy(stepContext) {
-        const searchDB = await Cart.find({id: stepContext.context._activity.conversation.id});
-        if(searchDB == []){
-            await Cart.create();
-            
-            
+        const idConversation = stepContext.context._activity.conversation.id;
+        const idBike =  stepContext.options.bike.id;
+        const nameBike = stepContext.options.bike.name;
+        const priceBike = stepContext.options.bike.price;
+        const resultAlreadyCreated = await dataBase.alreadyCreated(idConversation);
+        if(resultAlreadyCreated){
+            await dataBase.insert(idConversation,idBike,nameBike,priceBike);
+        }else{
+            await dataBase.addBike(idConversation,idBike,nameBike,priceBike);
         }
-        
-        if (!stepContext.values.bike) {
-            stepContext.values.bike = [];
-        }
-        stepContext.values.bike.push(stepContext.options.bike);
-        await stepContext.context.sendActivity(stepContext.options.bike.name + msg.bikeAdd);
+        await stepContext.context.sendActivity( nameBike+ msg.bikeAdd);
         return stepContext.prompt(CONTINUEBUY_CHOICEPROMPT, msg.continueBuy);
     }
 
