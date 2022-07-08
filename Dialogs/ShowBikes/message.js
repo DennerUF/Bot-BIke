@@ -9,15 +9,8 @@ module.exports = {
         prompt: `Quer comprar esta bicicleta agora ?`,
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar se deseja comprar a bicicleta'
     },
-    nextStepPromptNoOption:{
-        prompt: `O que você deseja fazer entao ?`,
-        choices: ChoiceFactory.toChoices(['Explorar outro filtro de pesquisa', 'Encerrar']),
-        retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
-    },
-    nextStepPrompt:{
-        prompt: `O que você deseja fazer entao ?`,
-        choices: ChoiceFactory.toChoices(['Ver Proxima opcao de bicicleta', 'Outro filtro de pesquisa', 'Encerrar']),
-        retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
-    }
+    nextStepPromptNoOption:ChoiceFactory.suggestedAction(['Explorar outro filtro de pesquisa', 'Encerrar'],`O que você deseja fazer entao ?`),
+    nextStepPrompt: ChoiceFactory.suggestedAction(['Ver Proxima opcao de bicicleta', 'Outro filtro de pesquisa', 'Encerrar'],`O que você deseja fazer entao ?`)
+    
    
 }

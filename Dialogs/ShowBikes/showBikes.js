@@ -9,14 +9,14 @@ const shoppingCar = new ShoppingCar();
 
 const msg = require('./message');
 const CONFIRM_BUY = 'CONFIRM_BUY';
-const NEXTSTEP_CHOOSEPROMPT = 'CHOOSENEXTSTEP';
+const NEXTSTEP_TEXTPROMPT = 'NEXTSTEP_TEXTPROMPT';
 const TEXT_PROMPT = 'textPrompt';
 const SHOWBIKES_DIALOG = 'SHOWBIKES';
 class ShowBikes extends ComponentDialog {
     constructor() {
         super(SHOWBIKES_DIALOG);
         this.addDialog(new TextPrompt(TEXT_PROMPT))
-            .addDialog(new ChoicePrompt(NEXTSTEP_CHOOSEPROMPT))
+            .addDialog(new TextPrompt(NEXTSTEP_TEXTPROMPT))
             .addDialog(new ConfirmPrompt(CONFIRM_BUY))
             .addDialog(shoppingCar)
             .addDialog(new WaterfallDialog(SHOWBIKES_DIALOG, [
@@ -56,7 +56,7 @@ class ShowBikes extends ComponentDialog {
         const msgPrompt = stepContext.values.bikes.length <= 1
         ? msg.nextStepPromptNoOption
         : msg.nextStepPrompt
-        return stepContext.prompt(NEXTSTEP_CHOOSEPROMPT, msgPrompt);
+        return stepContext.prompt(NEXTSTEP_TEXTPROMPT, msgPrompt);
         }
         return stepContext.next();
         
