@@ -10,10 +10,12 @@ const {
     MemoryStorage,
     UserState
 } = require('botbuilder');
+const { TwilioWhatsAppAdapter } = require('@botbuildercommunity/adapter-twilio-whatsapp');
 
 const { WelcomeBot } = require('./Bots/welcomeBot');
 const { MainDialog } = require('./Dialogs/mainDialog');
 const { BikeRecognizer } = require('./Luis/BikeRecognizer');
+const WhatsAppWelcomeBot = require('./Bots/welcomeWhatsApp');
 
 const server = restify.createServer();
 server.use(restify.plugins.bodyParser());
@@ -22,6 +24,7 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log(`\n${server.name} listening to ${server.url}`);
 });
 dataBase.connection();
+
 
 const credentialsFactory = new ConfigurationServiceClientCredentialFactory({
     MicrosoftAppId: process.env.MicrosoftAppId,
@@ -33,7 +36,12 @@ const credentialsFactory = new ConfigurationServiceClientCredentialFactory({
 const botFrameworkAuthentication = createBotFrameworkAuthenticationFromConfiguration(null, credentialsFactory);
 
 const adapter = new CloudAdapter(botFrameworkAuthentication);
-
+const whatsAppAdapter = new TwilioWhatsAppAdapter({
+    accountSid: process.env.TwillioId,
+    authToken: process.env.TwillioToken,
+    phoneNumber: process.env.NumberPhone,
+    endpointUrl: process.env.UrlBot
+})
 
 const { LuisAppId, LuisAPIKey, LuisAPIHostName } = process.env;
 const luisConfig = { applicationId: LuisAppId, endpointKey: LuisAPIKey, endpoint: `https://${LuisAPIHostName}` };
@@ -46,7 +54,7 @@ const conversationState = new ConversationState(memoryStorage);
 const luis = new BikeRecognizer(luisConfig);
 const dialog = new MainDialog();
 const bot = new WelcomeBot(conversationState, userState, dialog, luis);
-
+const botWhats = new WhatsAppWelcomeBot(conversationState, userState, dialog, luis);
 adapter.onTurnError = async (context, error) => {
     console.error(`\n [onTurnError] unhandled error: ${error}`);
     await context.sendTraceActivity(
@@ -63,4 +71,7 @@ adapter.onTurnError = async (context, error) => {
 
 server.post('/api/messages', async (req, res) => {
     await adapter.process(req, res, (context) =>bot.run(context));
+});
+server.post('/api/whatsApp/messages', async (req, res) => {
+    await whatsAppAdapter.processActivity(req, res, (context) => botWhats.run(context));
 });

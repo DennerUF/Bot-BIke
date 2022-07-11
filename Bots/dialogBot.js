@@ -3,7 +3,7 @@ const { ActivityHandler } = require('botbuilder');
 
 
 class DialogBot extends ActivityHandler {
-    constructor(conversationState, userState, dialog, luis) {
+    constructor(conversationState, userState, dialog, luis) { 
         super();
         if (!conversationState) throw new Error('[DialogBot]: Missing parameter. conversationState is required');
         if (!userState) throw new Error('[DialogBot]: Missing parameter. userState is required');

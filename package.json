@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@botbuildercommunity/adapter-twilio-whatsapp": "^1.2.0",
     "axios": "^0.27.2",
     "botbuilder": "^4.16.0",
     "botbuilder-ai": "^4.16.0",
