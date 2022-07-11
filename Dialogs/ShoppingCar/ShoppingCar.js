@@ -39,6 +39,7 @@ class ShoppingCar extends ComponentDialog {
         if (stepContext.options.remove) {
             return stepContext.next();
         }
+        console.log(stepContext.context._activity.conversation.id);
         const idConversation = stepContext.context._activity.conversation.id;
         const idBike = stepContext.options.bike.id;
         const nameBike = stepContext.options.bike.name;
