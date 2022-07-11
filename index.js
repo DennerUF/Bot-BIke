@@ -54,7 +54,7 @@ const conversationState = new ConversationState(memoryStorage);
 const luis = new BikeRecognizer(luisConfig);
 const dialog = new MainDialog();
 const bot = new WelcomeBot(conversationState, userState, dialog, luis);
-const botWhats = new WhatsAppWelcomeBot(conversationState, userState, dialog, luis);
+
 adapter.onTurnError = async (context, error) => {
     console.error(`\n [onTurnError] unhandled error: ${error}`);
     await context.sendTraceActivity(
@@ -72,6 +72,7 @@ adapter.onTurnError = async (context, error) => {
 server.post('/api/messages', async (req, res) => {
     await adapter.process(req, res, (context) =>bot.run(context));
 });
+const botWhats = new WhatsAppWelcomeBot(conversationState, userState, dialog, luis);
 server.post('/api/whatsApp/messages', async (req, res) => {
-    await whatsAppAdapter.processActivity(req, res, (context) => botWhats.run(context));
+    await whatsAppAdapter.processActivity(req, res, (context) => botWhats.run(context,req.body.ProfileName));
 });
