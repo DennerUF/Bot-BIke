@@ -7,7 +7,7 @@ const whatsAppAdapter = new TwilioWhatsAppAdapter({
 })
 module.exports = {
     async whatsAppPost(req,res){
-        await whatsAppAdapter.processActivity(req, res, (context) =>{ 
+        await whatsAppAdapter.processActivity(req, res, async (context) =>{ 
             console.log(req.body);
             await context.sendActivity(`Oi! Eu sou o Bici JR,sou craque em
             pedaladas e vou funcionar como um guidão
