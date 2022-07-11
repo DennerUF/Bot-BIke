@@ -6,7 +6,7 @@ const whatsAppAdapter = new TwilioWhatsAppAdapter({
     endpointUrl: process.env.UrlBot
 })
 module.exports = {
-    async whatsAppPost(req,res){
+    async whatsAppPost(req,res,bot){
         await whatsAppAdapter.processActivity(req, res, async (context) =>{ 
             console.log(req.body);
             await context.sendActivity(`Oi! Eu sou o Bici JR,sou craque em

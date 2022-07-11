@@ -69,6 +69,6 @@ server.post('/api/messages', async (req, res) => {
 });
 
 server.post('/api/whatsApp/messages', async (req, res) => {
-    await whatsApp.whatsAppPost(req,res);
+    await whatsApp.whatsAppPost(req,res,bot);
     
 });
