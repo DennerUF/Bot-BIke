@@ -1,27 +1,18 @@
-const { DialogBot } = require('./dialogBot');
+const { TwilioWhatsAppAdapter } = require('@botbuildercommunity/adapter-twilio-whatsapp');
+const whatsAppAdapter = new TwilioWhatsAppAdapter({
+    accountSid: process.env.TwillioId,
+    authToken: process.env.TwillioToken,
+    phoneNumber: process.env.NumberPhone,
+    endpointUrl: process.env.UrlBot
+})
+module.exports = {
+    async whatsAppPost(req,res){
+        await whatsAppAdapter.processActivity(req, res, (context) =>{ 
+            console.log(req.body);
+            await context.sendActivity(`Oi! Eu sou o Bici JR,sou craque em
+            pedaladas e vou funcionar como um guidão
+            para te guiar na sua busca!`);
+        bot.run(context)});
 
-class WhatsAppWelcomeBot extends DialogBot {
-    constructor(conversationState, userState, dialog, luis, profileName) {
-        super(conversationState, userState, dialog, luis);
-        this.userState = userState;
-        this.userState.nameSpace = profileName; 
-
-            if (!this.userState.storage[`${this.userState.nameSpace}`]) {
-                this.welcome(context);
-                this.userState.storage[`${this.userState.nameSpace}`] = {
-                    authenticated: null,
-                    iteration: 0
-                }
-                await dialog.run(context, conversationState.createProperty('DialogState'));
-            }
-
-            await this.next();
-        };
-        async welcome(context){
-        return context.sendActivity(`Oi! Eu sou o Bici JR,sou craque em
-                        pedaladas e vou funcionar como um guidão
-                        para te guiar na sua busca!`);
-        }
     }
-
-module.exports = WhatsAppWelcomeBot;
+}
