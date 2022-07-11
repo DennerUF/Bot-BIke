@@ -23,6 +23,24 @@ module.exports = {
             }
         }
     },
+    async removeBike(id,_id){
+        try {
+            return Cart.findOneAndUpdate({ id:id }, { $pull:{bikes: {_id}} })
+        } catch (error) {
+            if(error){
+                return error;
+            }
+        }
+    },
+    async removeCart(id){
+        try {
+            return Cart.deleteOne({ id:id })
+        } catch (error) {
+            if(error){
+                return error;
+            }
+        }
+    },
     async findBikes(id){
         try {
             const result = await Cart.find({id: id});
