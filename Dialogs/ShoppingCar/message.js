@@ -23,6 +23,17 @@ const { ChoiceFactory } = require('botbuilder-dialogs');
     proceedBuy: {
         prompt: `Posso confirmar e prosseguir com sua compra ?`,
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
+    },
+    dataPurchase:(bikes)=>{
+        const now = new Date();
+        let price = 0;
+        let msg = `Este é o seu carrinho de compras. Os valores são válidos para ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}\n`
+        bikes.map((bike)=>{
+            price+= bike.price
+            msg+=`${bike.name}\n`
+        })
+        msg+= `Valor Total: R$${price}`;
+        return msg;
     }
    
 }

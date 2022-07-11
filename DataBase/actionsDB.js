@@ -23,5 +23,15 @@ module.exports = {
             }
         }
     },
+    async findBikes(id){
+        try {
+            const result = await Cart.find({id: id});
+            return result[0].bikes;
+        } catch (error) {
+            if(error){
+                return error;
+            }
+        }
+    },
 
 }

@@ -52,7 +52,8 @@ class ShoppingCar extends ComponentDialog {
         if (!entitie.finishOrder) {
             return stepContext.replaceDialog('MENU');
         }
-        await stepContext.context.sendActivity('**Dados compra**');
+        const bikes = await dataBase.findBikes(stepContext.context._activity.conversation.id);
+        await stepContext.context.sendActivity(msg.dataPurchase(bikes));
         return stepContext.prompt(PROCEEDBUY_CONFIRMPROMPT, msg.proceedBuy);
     }
 
