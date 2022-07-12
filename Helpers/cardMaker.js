@@ -19,11 +19,20 @@ module.exports = {
         );
     },
     fullCardWhatsApp: (bike, length) => {
-        let message = `**${bike.name}** \n**Marca**: ${bike.brand} \n**Preço**: R$ ${bike.price} \nO que deseja fazer ? `
+        let message = `*${bike.name}* \n*Marca*: ${bike.brand} \n*Preço*: R$ ${bike.price} \nO que deseja fazer ? `
         message += length <= 1
-            ? `\n   **-Mais Informações sobre a bicicleta** \n  **-Explorar outro filtro de pesquisa**`
-            : `\n   **-Mais Informações sobre a bicicleta** \n  **-Ver Próxima opção de bicicleta** \n **-Explorar outro filtro de pesquisa**`;
-        return message;
+            ? `\n   _-Mais Informações sobre a bicicleta_ \n  _-Explorar outro filtro de pesquisa_`
+            : `\n   _-Mais Informações sobre a bicicleta_ \n  _-Ver Próxima opção de bicicleta_ \n _-Explorar outro filtro de pesquisa_`;
+        return {
+            type: 'message',
+            text: message,
+            attachments: [
+                {
+                    contentType: 'image/jpeg ',
+                    contentUrl: `${bike.image}`
+                }
+            ]
+        };
     },
 
 
