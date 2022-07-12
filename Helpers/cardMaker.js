@@ -8,14 +8,46 @@ module.exports = {
      */
     fullCard: (bike,length) => {
         return{
-            type: 'message',
-            text: `${bike.name} \nMarca: ${bike.brand} \nPreço:R$ ${bike.price}`,
-            attachments: [
-                {
-                    contentType: 'image/png',
-                    contentUrl: `${bike.image}`
+            type: 'button',
+            header:{
+                type:'image',
+                text: 'image',
+                image:{
+                    link:`${bike.image}`,
+                    provider:{
+                        name:'internet'
+                    }
                 }
-            ]
+            },
+            body:{
+                text:`${bike.name} \nMarca: ${bike.brand} \nPreço:R$ ${bike.price}`,
+            },
+            action:{
+                buttons:[
+                    {
+                        type:'reply',
+                        reply:{
+                            id:'1',
+                            title: 'Mais Informações sobre a bicicleta'
+                        }
+                    },
+                    {
+                        type:'reply',
+                        reply:{
+                            id:'2',
+                            title: 'Ver Próxima opção de bicicleta'
+                        }
+                    },
+                    {
+                        type:'reply',
+                        reply:{
+                            id:'3',
+                            title: 'Explorar outro filtro de pesquisa'
+                        }
+                    }
+                ]
+            }
+            
         }; 
         // CardFactory.heroCard(
         //     `${bike.name}

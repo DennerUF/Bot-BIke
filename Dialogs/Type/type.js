@@ -30,6 +30,10 @@ class Type extends ComponentDialog {
      * @returns ChoicePrompt filter types
      */
     async chooseFilterType(stepContext) {
+        console.log('-----stepContext------');
+        console.log(stepContext);
+        console.log('---channelId----');
+        console.log(stepContext.context._activity.channelId);
         await stepContext.context.sendActivity(msg.message);
         return stepContext.prompt(CHOOSE_FILTER_TYPE, msg.chooseType);
     }
@@ -72,14 +76,6 @@ class Type extends ComponentDialog {
         stepContext.recognized.value = entitie.type[0][0];
         return true;
     }
-
-
-
-
-
-
-
-
 }
 
 module.exports.Type = Type;
