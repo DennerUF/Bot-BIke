@@ -38,12 +38,13 @@ class ShowBikes extends ComponentDialog {
         stepContext.values.bikes = stepContext.options.bikes;
         stepContext.values.description = stepContext.options.description || false;
         const bikes = stepContext.options.bikes;
+        const channel = stepContext.context._activity.channelId;
         if (stepContext.options.description) {
             stepContext.values.newBranch = true;
-            await stepContext.context.sendActivity({ attachments: [card.descriptionCard(bikes[0], bikes.length)] });
+            await stepContext.context.sendActivity({ attachments: [card.descriptionCard(bikes[0],channel)] });
             return stepContext.prompt(CONFIRM_BUY, msg.confirmBuy);
         } else {
-            await stepContext.context.sendActivity({ attachments: [card.fullCard(bikes[0], bikes.length)] });
+            await stepContext.context.sendActivity({ attachments: [card.fullCard(bikes[0], bikes.length, channel)] });
         }
         return stepContext.prompt(TEXT_PROMPT);
     }
