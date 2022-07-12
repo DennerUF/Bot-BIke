@@ -19,10 +19,10 @@ module.exports = {
         );
     },
     fullCardWhatsApp: (bike, length) => {
-        let message = `${bike.name} \nMarca: ${bike.brand} \nPreço:R$ ${bike.price} \n O que deseja fazer ? `
+        let message = `**${bike.name}** \n**Marca**: ${bike.brand} \n**Preço**: R$ ${bike.price} \nO que deseja fazer ? `
         message += length <= 1
-            ? `\nMais Informações sobre a bicicleta \nExplorar outro filtro de pesquisa`
-            : `\nMais Informações sobre a bicicleta \nVer Próxima opção de bicicleta \nExplorar outro filtro de pesquisa`;
+            ? `\n   **-Mais Informações sobre a bicicleta** \n  **-Explorar outro filtro de pesquisa**`
+            : `\n   **-Mais Informações sobre a bicicleta** \n  **-Ver Próxima opção de bicicleta** \n **-Explorar outro filtro de pesquisa**`;
         return message;
     },
 

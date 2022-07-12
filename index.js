@@ -65,7 +65,9 @@ adapter.onTurnError = async (context, error) => {
 };
 
 server.post('/api/messages', async (req, res) => {
-    await adapter.process(req, res, (context) =>bot.run(context));
+    await adapter.process(req, res, async (context) =>{
+        context.activity.locale='pt-br';
+        await bot.run(context)});
 });
 
 server.post('/api/whatsApp/messages', async (req, res) => {
