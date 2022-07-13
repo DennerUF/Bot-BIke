@@ -10,7 +10,7 @@ module.exports = {
      */
     fullCard: (bike, length, channel) => {
         if (channel === 'whatsapp') {
-            let message = `Bicicleta *${bike.name}* \n*Marca*: ${bike.brand} \n*Preço*: R$ ${bike.price} \nO que deseja fazer ? `
+            let message = `Bicicleta *${bike.name}* \n*Marca*: ${bike.brand} \n*Preço*: R$ ${bike.price} \nO que deseja fazer ?\n `
             message += length <= 1
                 ? `\n_-Mais Informações da bicicleta_ \n_-Explorar outro filtro de pesquisa_`
                 : `\n_-Mais Informações da bicicleta_ \n_-Ver Próxima opção de bicicleta_ \n_-Explorar outro filtro de pesquisa_`;

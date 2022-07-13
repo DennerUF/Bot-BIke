@@ -38,8 +38,8 @@ const { ChoiceFactory } = require('botbuilder-dialogs');
             msg+=`\n Bicicleta ${bike.name}`
         })
         msg+= (channel === 'whatsapp')
-        ? `*Valor Total*: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`
-        : `**Valor Total**: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
+        ? `\n*Valor Total*: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`
+        : `\n**Valor Total**: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
         return msg;
     }
    
