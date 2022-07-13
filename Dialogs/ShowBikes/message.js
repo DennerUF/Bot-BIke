@@ -12,9 +12,10 @@ module.exports = {
     /**
      * Returns a question with suggested answers
      * @param {Number} length 
+     * @param {String} channel Message channel  
      * @returns String
      */
-    nextStepPrompt: (length) =>{
+    nextStepPrompt: (length, channel) =>{
         if(length <= 1){
             return (channel === 'whatsapp')
             ? `O que você deseja fazer entao ?\n \n_-Explorar outro filtro de pesquisa_\n_-Encerrar_`
