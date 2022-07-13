@@ -59,7 +59,7 @@ class ShoppingCar extends ComponentDialog {
             return stepContext.replaceDialog('MENU');
         }
         const bikes = await dataBase.findBikes(stepContext.context._activity.conversation.id);
-        await stepContext.context.sendActivity(msg.dataPurchase(bikes));
+        await stepContext.context.sendActivity(msg.dataPurchase(bikes,stepContext.context._activity.channelId));
         return stepContext.prompt(PROCEEDBUY_CONFIRMPROMPT, msg.proceedBuy);
     }
 

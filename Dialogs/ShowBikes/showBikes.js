@@ -41,18 +41,11 @@ class ShowBikes extends ComponentDialog {
         const channel = stepContext.context._activity.channelId;
         if (stepContext.options.description) {
             stepContext.values.newBranch = true;
-            let content= (channel === 'whatsapp')
-            ? card.descriptionCardwHATSaPP(bikes[0])
-            :{ attachments: [card.descriptionCard(bikes[0])] }
-
-            await stepContext.context.sendActivity(content);
+        
+            await stepContext.context.sendActivity(card.descriptionCard(bikes[0]));
             return stepContext.prompt(CONFIRM_BUY, msg.confirmBuy);
         } else {
-            let content= (channel === 'whatsapp')
-            ? card.fullCardWhatsApp(bikes[0],bikes.length)
-            :{ attachments: [card.fullCard(bikes[0], bikes.length)] }
-
-            await stepContext.context.sendActivity(content);
+            await stepContext.context.sendActivity(card.fullCard(bikes[0], bikes.length, channel));
         }
         return stepContext.prompt(TEXT_PROMPT);
     }

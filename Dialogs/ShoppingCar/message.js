@@ -20,17 +20,25 @@ const { ChoiceFactory } = require('botbuilder-dialogs');
         prompt: `Posso confirmar e prosseguir com sua compra ?`,
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
     },
-    dataPurchase:(bikes)=>{
+    /**
+     * Organize shopping cart data
+     * @param {object[]} bikes Bikes in the cart
+     * @param {String} channel Message channel
+     * @returns {String} Shopping cart details
+     */
+    dataPurchase:(bikes,channel)=>{
         const now = new Date();
         let month =(now.getMonth()+1).toString();
         month = month.length == 1 ? `0${month}` : month;
         let price = 0;
-        let msg = `Este é o seu carrinho de compras. Os valores são válidos para ${now.getDate()}/${month}/${now.getFullYear()}\n`
+        let msg = `Este é o seu carrinho de compras. Os valores são válidos para ${now.getDate()}/${month}/${now.getFullYear()}\nProdutos:`
         bikes.map((bike)=>{
             price+= bike.price
-            msg+=`${bike.name}\n`
+            msg+=`\n Bicicleta ${bike.name}\n`
         })
-        msg+= `Valor Total: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
+        msg+= (channel === 'whatsApp')
+        ? `*Valor Total*: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`
+        : `**Valor Total**: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
         return msg;
     }
    
