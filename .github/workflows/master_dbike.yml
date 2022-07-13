@@ -24,17 +24,12 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm run build --if-present
-          npm run test:ci --if-present
-
-      - name: Zip artifact for deployment
-        run: zip -r release.zip *
-
+      
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: release.zip
-
+          path: .
 
   deploy:
     runs-on: ubuntu-latest
@@ -56,4 +51,4 @@ jobs:
           app-name: 'Dbike'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B66F8F46711A4E3CA9CDC71EC4FA7740 }}
-          package: release.zip
+          package: .
