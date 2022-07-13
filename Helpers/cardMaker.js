@@ -13,16 +13,16 @@ module.exports = {
         \nPreço:R$ ${bike.price}`,
             CardFactory.images([`${bike.image}`]),
             length <= 1
-                ? ['Mais Informações sobre a bicicleta', 'Explorar outro filtro de pesquisa']
-                : ['Mais Informações sobre a bicicleta', 'Ver Próxima opção de bicicleta', 'Explorar outro filtro de pesquisa']
+                ? ['Mais Informações da bicicleta', 'Explorar outro filtro de pesquisa']
+                : ['Mais Informações da bicicleta', 'Ver Próxima opção de bicicleta', 'Explorar outro filtro de pesquisa']
 
         );
     },
     fullCardWhatsApp: (bike, length) => {
         let message = `*${bike.name}* \n*Marca*: ${bike.brand} \n*Preço*: R$ ${bike.price} \nO que deseja fazer ? `
         message += length <= 1
-            ? `\n   _-Mais Informações sobre a bicicleta_ \n  _-Explorar outro filtro de pesquisa_`
-            : `\n   _-Mais Informações sobre a bicicleta_ \n  _-Ver Próxima opção de bicicleta_ \n _-Explorar outro filtro de pesquisa_`;
+            ? `\n_-Mais Informações da bicicleta_ \n_-Explorar outro filtro de pesquisa_`
+            : `\n_-Mais Informações da bicicleta_ \n_-Ver Próxima opção de bicicleta_ \n_-Explorar outro filtro de pesquisa_`;
         return {
             type: 'message',
             text: message,
