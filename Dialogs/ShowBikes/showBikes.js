@@ -49,7 +49,12 @@ class ShowBikes extends ComponentDialog {
         }
         return stepContext.prompt(TEXT_PROMPT);
     }
-
+    /**
+     * If the user wants to buy a bike, start the 'SHOPPINGCAR' dialog
+     * If not, ask what he wants to do
+     * @param {TurnContext} stepContext Dialog Context 
+     * @returns {Promise<DialogTurnStatus>}
+     */
     async confirmBuy(stepContext){
         if(stepContext.values.newBranch){
             if(stepContext.result){

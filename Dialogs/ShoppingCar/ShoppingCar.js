@@ -34,7 +34,13 @@ class ShoppingCar extends ComponentDialog {
 
         this.initialDialogId = SHOPPINGCAR_DIALOG;
     }
-
+    /**
+     * Check if dialog was called by 'removeBike', if yes, skip to next step
+     * Add bike to shopping cart
+     * And asks if the user wants to finalize the order or continue shopping
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>} 
+     */
     async continueBuy(stepContext) {
         if (stepContext.options.remove) {
             return stepContext.next();
@@ -52,7 +58,12 @@ class ShoppingCar extends ComponentDialog {
         await stepContext.context.sendActivity(nameBike + msg.bikeAdd);
         return stepContext.prompt(CONTINUEBUY_CHOICEPROMPT, msg.continueBuy);
     }
-
+    /**
+     * If the user wants to continue shopping, open the 'MENU' dialog
+     * Displays shopping cart data and asks if you want to checkout
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
     async nextAction(stepContext) {
         const entitie = await recognizer.getEntities(stepContext.context.luisResult);
         if (!entitie.finishOrder && !stepContext.options.remove) {
@@ -62,7 +73,12 @@ class ShoppingCar extends ComponentDialog {
         await stepContext.context.sendActivity(msg.dataPurchase(bikes,stepContext.context._activity.channelId));
         return stepContext.prompt(PROCEEDBUY_CONFIRMPROMPT, msg.proceedBuy);
     }
-
+    /**
+     * If the user wants to confirm the purchase, ask about payment method
+     * If not, ask what he wants to do.
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
     async registerOrChange(stepContext) {
         if (!stepContext.result) {
             return (channel === 'whatsapp')
@@ -72,7 +88,11 @@ class ShoppingCar extends ComponentDialog {
         await stepContext.context.sendActivity(msg.messageRegisterOrChange);
         return stepContext.prompt(PAYMENTMETHOD_CHOICEPROMPT, msg.paymentMethod);
     }
-
+    /**
+     * starts a new dialog according to the answer to the previous question
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
     async startNewDialog(stepContext) {
         const entitie = recognizer.getEntities(stepContext.context.luisResult);
         if (entitie.paymentMethod) {
@@ -86,17 +106,6 @@ class ShoppingCar extends ComponentDialog {
         await stepContext.context.sendActivity('Compra cancelada');
         return stepContext.cancelAllDialogs(true);
     }
-
-
-
-
-
-
-
-
-
-
-
 
 }
 

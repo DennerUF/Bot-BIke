@@ -1,4 +1,4 @@
-const { DateTimePrompt, TextPrompt, WaterfallDialog, ChoicePrompt, NumberPrompt,ComponentDialog, ConfirmPrompt } = require('botbuilder-dialogs');
+const { TextPrompt, WaterfallDialog, ChoicePrompt, NumberPrompt, ComponentDialog, ConfirmPrompt } = require('botbuilder-dialogs');
 const recognizer = require('../../Helpers/getLuis');
 
 
@@ -33,24 +33,36 @@ class Register extends ComponentDialog {
             .addDialog(new WaterfallDialog(REGISTRATION_DIALOG, [
                 this.startDialog.bind(this),
                 this.cepStep.bind(this),
-                this.cityStep.bind(this),
                 this.districtStep.bind(this),
                 this.addressStep.bind(this),
                 this.numberHouseStep.bind(this),
                 this.complementStep.bind(this),
                 this.nameStep.bind(this),
                 this.cpfStep.bind(this),
-                this.foneStep.bind(this)
+                this.foneStep.bind(this),
+                this.newDialogStep.bind(this)
             ]));
 
         this.initialDialogId = REGISTRATION_DIALOG;
 
     }
+    /**
+     * First step of the waterfall. 
+     * Question about Cep
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
     async startDialog(stepContext) {
         stepContext.values.purchaseData = stepContext.options;
-
         return stepContext.prompt(CEP_PROMPT, msg.promptCEP);
     }
+    /**
+     * Check if CEP was passed correctly
+     * If not, start the path with new conversations
+     * Question about city, if CEP entered incorrectly
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>} 
+     */
     async cepStep(stepContext) {
         const entitie = recognizer.getEntities(stepContext.context.luisResult);
         if (!entitie || !entitie.CEP) {
@@ -69,61 +81,94 @@ class Register extends ComponentDialog {
         stepContext.values.purchaseData.endereco = resultValidation.address;
         return stepContext.next();
     }
-
-    async cityStep(stepContext){
+    /**
+     * Question sobre district, if CEP entered incorrectly
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
+    async districtStep(stepContext) {
         if (stepContext.values.purchaseData.cep !== '*') {
             return stepContext.next();
         }
         stepContext.values.purchaseData.cidade = stepContext.result;
         return stepContext.prompt(DISTRICT_TEXTPROMPT, msg.promptDistrict);
     }
-
-    async districtStep(stepContext){
+    /**
+     * Question about address, if CEP entered incorrectly
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
+    async addressStep(stepContext) {
         if (stepContext.values.purchaseData.cep !== '*') {
             return stepContext.next();
         }
         stepContext.values.purchaseData.bairro = stepContext.result;
         return stepContext.prompt(ADDRESS_TEXTPROMPT, msg.promptAddress);
     }
-
-    async addressStep(stepContext){
+    /**
+     * Question about house number
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
+    async numberHouseStep(stepContext) {
         if (stepContext.values.purchaseData.cep === '*') {
             stepContext.values.purchaseData.endereco = stepContext.result;
         }
         return stepContext.prompt(NUMBERHOUSE_NUMBERPROMPT, msg.promptNumberHouse);
     }
-
-    async numberHouseStep(stepContext){
+    /**
+     * Ask for a complement about the address
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
+    async complementStep(stepContext) {
         const entitie = recognizer.getEntities(stepContext.context.luisResult);
         stepContext.values.purchaseData.numero = entitie.number[0] || stepContext.result;
         return stepContext.prompt(COMPLEMENT_TEXTPROMPT, msg.promptComplement);
 
     }
-    async complementStep(stepContext){
+    /**
+     * Ask for full name
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
+    async nameStep(stepContext) {
         stepContext.values.purchaseData.complemento = stepContext.result;
         return stepContext.prompt(NAME_TEXTPROMPT, msg.promptName);
-
     }
-
-    async nameStep(stepContext) {
+    /**
+     * Question CPF
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
+    async cpfStep(stepContext) {
         stepContext.values.purchaseData.nome = stepContext.result;
         return stepContext.prompt(CPF_PROMPT, msg.promptCPF);
     }
-
-    async cpfStep(stepContext) {
+    /**
+     * Question phone number
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
+    async foneStep(stepContext) {
         const entitie = recognizer.getEntities(stepContext.context.luisResult);
         stepContext.values.purchaseData.cpf = entitie.CPF[0] || stepContext.result;
         return stepContext.prompt(FONE_PROMPT, msg.promptFone);
     }
-    async foneStep(stepContext) {
+    /**
+     * Start new dialog
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}
+     */
+    async newDialogStep(stepContext) {
         const entitie = recognizer.getEntities(stepContext.context.luisResult);
         stepContext.values.purchaseData.telefone = entitie.number[0] || stepContext.result;
-        
-        return stepContext.replaceDialog('CHANGEDATA',{data: stepContext.values.purchaseData});
+
+        return stepContext.replaceDialog('CHANGEDATA', { data: stepContext.values.purchaseData });
     }
 
 
-    
+
 }
 
 module.exports.Register = Register;

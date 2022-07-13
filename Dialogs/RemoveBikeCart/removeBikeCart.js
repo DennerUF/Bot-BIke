@@ -19,7 +19,11 @@ class RemoveBikeCart extends ComponentDialog {
 
         this.initialDialogId = REMOVEBIKECART_DIALOG;
     }
-
+    /**
+     * Shows cart items and asks which user wants to remove
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>} 
+     */
     async selectItem(stepContext) {
         const bikes = await dataBase.findBikes(stepContext.context._activity.conversation.id);
         stepContext.values.bikes = bikes;
@@ -27,7 +31,12 @@ class RemoveBikeCart extends ComponentDialog {
         await stepContext.context.sendActivity(msg.msgItemsCart+namesBike);
         return stepContext.prompt(ITEMCART_NUMBERPROMPT, msg.selectItem(namesBike));
     }
-
+    /**
+     * Checks if the user has reached the limits of wrong answers, if yes, closes the dialog
+     * Calls the 'SHOPPINGCAR' dialog informing that bike was removed
+     * @param {TurnContext} stepContext Dialog Context
+     * @returns {Promise<DialogTurnStatus>}  
+     */
     async removeItem(stepContext){
         if (await objIsEndDialog.isEndDialog(stepContext)) { return stepContext.endDialog(); }
         const position = stepContext.result - 1;
@@ -36,7 +45,13 @@ class RemoveBikeCart extends ComponentDialog {
         return stepContext.replaceDialog('SHOPPINGCAR', {remove: true});
 
     }
-
+    /**
+     * Validates 'selectItem' response with entities from LUIS.
+     * And counts the amount of wrong answers from the user, 
+     * After threshold reaching, add "finishDialog" to 'stepContext.recognized.value' signaling to prompt method that the dialog box should be closed
+     * @param {TurnContext} stepContext Dialog Context 
+     * @returns boolean 
+     */
     async itemCartValidator(stepContext){
         const entitie = recognizer.getEntities(stepContext.context.luisResult);
         if (!entitie.number && stepContext.attemptCount < 2) {
