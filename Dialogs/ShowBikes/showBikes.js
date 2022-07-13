@@ -55,10 +55,7 @@ class ShowBikes extends ComponentDialog {
             if(stepContext.result){
                 return stepContext.replaceDialog('SHOPPINGCAR', { bike: stepContext.values.bikes[0] })
             }
-        const msgPrompt = stepContext.values.bikes.length <= 1
-        ? msg.nextStepPromptNoOption
-        : msg.nextStepPrompt
-        return stepContext.prompt(NEXTSTEP_TEXTPROMPT, msgPrompt);
+        return stepContext.prompt(NEXTSTEP_TEXTPROMPT, msg.nextStepPrompt(stepContext.values.bikes.length));
         }
         return stepContext.next();
         

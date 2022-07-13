@@ -11,6 +11,7 @@ const { ChoiceFactory } = require('botbuilder-dialogs');
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
     },
     changesInCart : ChoiceFactory.suggestedAction(['Retirar um item do carrinho', 'Adicionar mais bicicletas ao carrinho','Desistir Compra'],`O que você deseja fazer então ?`),
+    changesInCartWhatsapp : `O que você deseja fazer então ?\n\n _-Retirar um item do carrinho_\n _-Adicionar mais bicicletas ao carrinho\n _-Desistir Compra`,
     paymentMethod : {
         prompt: `Escolha o método de pagamento`,
         choices: ChoiceFactory.toChoices(['Boleto', 'Pix','Cartão de Crédito']),
@@ -31,12 +32,12 @@ const { ChoiceFactory } = require('botbuilder-dialogs');
         let month =(now.getMonth()+1).toString();
         month = month.length == 1 ? `0${month}` : month;
         let price = 0;
-        let msg = `Este é o seu carrinho de compras. Os valores são válidos para ${now.getDate()}/${month}/${now.getFullYear()}\nProdutos:`
+        let msg = `Este é o seu carrinho de compras. Os valores são válidos para ${now.getDate()}/${month}/${now.getFullYear()}\nProdutos:\n`
         bikes.map((bike)=>{
             price+= bike.price
-            msg+=`\n Bicicleta ${bike.name}\n`
+            msg+=`\n Bicicleta ${bike.name}`
         })
-        msg+= (channel === 'whatsApp')
+        msg+= (channel === 'whatsapp')
         ? `*Valor Total*: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`
         : `**Valor Total**: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
         return msg;

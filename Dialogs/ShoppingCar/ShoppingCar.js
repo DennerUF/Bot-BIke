@@ -65,7 +65,9 @@ class ShoppingCar extends ComponentDialog {
 
     async registerOrChange(stepContext) {
         if (!stepContext.result) {
-            return stepContext.prompt(CHANGE_TEXTPROMPT, msg.changesInCart);
+            return (channel === 'whatsapp')
+            ? stepContext.prompt(CHANGE_TEXTPROMPT, msg.changesInCartWhatsapp)
+            : stepContext.prompt(CHANGE_TEXTPROMPT, msg.changesInCart);
         }
         await stepContext.context.sendActivity(msg.messageRegisterOrChange);
         return stepContext.prompt(PAYMENTMETHOD_CHOICEPROMPT, msg.paymentMethod);
