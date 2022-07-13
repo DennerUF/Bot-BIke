@@ -70,7 +70,7 @@ class Register extends ComponentDialog {
             return stepContext.prompt(CITY_TEXTPROMPT, msg.promptCity);
         }
         let cep = entitie.CEP[0];
-        const resultValidation = await cepValidator(cep);
+        const resultValidation = await cepValidator.validateCep(cep);
         if (!resultValidation) {
             stepContext.values.purchaseData.cep = '*';
             return stepContext.prompt(CITY_TEXTPROMPT, msg.promptCity);
