@@ -10,7 +10,7 @@ const { ChoiceFactory } = require('botbuilder-dialogs');
         choices: ChoiceFactory.toChoices(['Finalizar pedido', 'Continuar comprando']),
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
     },
-    changesInCart : ChoiceFactory.suggestedAction(['Retirar um item do carrinho', 'Adicionar mais bicicletas ao carrinho','Desistir Compra'],`O que você deseja fazer então ?`),
+    changesInCart : ChoiceFactory.suggestedAction(['Retirar um item do carrinho', 'Adicionar mais bicicletas ao carrinho','Desistir Compra'],`O que você deseja fazer então ?`,'oi',{includeNumbers:false}),
     changesInCartWhatsapp : `O que você deseja fazer então ?\n\n _-Retirar um item do carrinho_\n _-Adicionar mais bicicletas ao carrinho\n _-Desistir Compra`,
     paymentMethod : {
         prompt: `Escolha o método de pagamento`,
