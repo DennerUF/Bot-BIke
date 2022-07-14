@@ -98,13 +98,14 @@ class ShoppingCar extends ComponentDialog {
         if (entitie.paymentMethod) {
             return stepContext.replaceDialog('REGISTER', { paymentMethod: entitie.paymentMethod[0][0] });
         } else if (entitie.remove) {
-            return stepContext.replaceDialog('REMOVEBIKECART');
-        } else if (entitie.addBike) {
-            return stepContext.replaceDialog('MENU');
+            return stepContext.replaceDialog('REMOVEBIKECART');            
+        } else if (entitie.cancel) {
+            await dataBase.removeCart(stepContext.context._activity.conversation.id);
+            await stepContext.context.sendActivity('Compra cancelada');
+            return stepContext.cancelAllDialogs(true);
         }
-        await dataBase.removeCart(stepContext.context._activity.conversation.id);
-        await stepContext.context.sendActivity('Compra cancelada');
-        return stepContext.cancelAllDialogs(true);
+        return stepContext.replaceDialog('MENU');
+       
     }
 
 }

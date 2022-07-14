@@ -32,14 +32,14 @@ const { ChoiceFactory } = require('botbuilder-dialogs');
         let month =(now.getMonth()+1).toString();
         month = month.length == 1 ? `0${month}` : month;
         let price = 0;
-        let msg = `Este é o seu carrinho de compras. Os valores são válidos para ${now.getDate()}/${month}/${now.getFullYear()}\nProdutos:\n`
+        let msg = `Este é o seu carrinho de compras. Os valores são válidos para ${now.getDate()}/${month}/${now.getFullYear()}\n\nProdutos:`
         bikes.map((bike)=>{
             price+= bike.price
             msg+=`\n Bicicleta ${bike.name}`
         })
         msg+= (channel === 'whatsapp')
-        ? `\n*Valor Total*: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`
-        : `\n**Valor Total**: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
+        ? `\n\n*Valor Total*: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`
+        : `\n\n**Valor Total**: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
         return msg;
     }
    
