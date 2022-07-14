@@ -7,7 +7,8 @@ module.exports = {
     erro: `Encontramos um erro. Tente novamente`,
     confirmBuy: {
         prompt: `Quer comprar esta bicicleta agora ?`,
-        retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar se deseja comprar a bicicleta'
+        retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar se deseja comprar a bicicleta',
+        options:{includeNumbers:false}
     },
     /**
      * Returns a question with suggested answers

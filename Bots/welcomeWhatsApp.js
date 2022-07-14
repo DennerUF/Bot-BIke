@@ -8,7 +8,6 @@ const whatsAppAdapter = new TwilioWhatsAppAdapter({
 module.exports = {
     async whatsAppPost(req, res, bot) {
         await whatsAppAdapter.processActivity(req, res, async (context) => {
-            context.activity.locale='pt-br'
             //await context.sendActivity(`Oi! Eu sou o Bici JR,sou craque em pedaladas e vou funcionar como um guidão para te guiar na sua busca!`);
             await bot.run(context);
         });
