@@ -10,7 +10,7 @@ module.exports = {
     },
     chooseColor: {
         prompt: `Escolha entre as cores abaixo`,
-        choices: ChoiceFactory.toChoices(['Branca', 'Preta', 'Azul', 'Rosa', 'Verde','Vermelha', 'Outro Cores']),
+        choices: ['Branca', 'Preta', 'Azul', 'Rosa', 'Verde','Vermelha', 'Outro Cores'],
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar qual sua escolha'
     }
 }
