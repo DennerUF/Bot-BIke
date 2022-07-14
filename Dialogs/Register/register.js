@@ -1,4 +1,4 @@
-const { TextPrompt, WaterfallDialog, ChoicePrompt, NumberPrompt, ComponentDialog, ConfirmPrompt } = require('botbuilder-dialogs');
+const { TextPrompt, WaterfallDialog, ChoicePrompt, NumberPrompt, ComponentDialog } = require('botbuilder-dialogs');
 const recognizer = require('../../Helpers/getLuis');
 
 

@@ -11,7 +11,7 @@ class ChangePurchaseData extends ComponentDialog {
     constructor() {
         super(ChangePurchaseData_DIALOG);
         this.addDialog(new TextPrompt(START_TEXTPROMPT, this.startDialogValidator))
-            .addDialog(new ConfirmPrompt(CONFIRMDATA_CONFIRMPROMPT))
+            .addDialog(new ConfirmPrompt(CONFIRMDATA_CONFIRMPROMPT,undefined,'pt-br'))
             .addDialog(new TextPrompt(CHANGE_TEXTPROMPT))
             .addDialog(new WaterfallDialog(ChangePurchaseData_DIALOG, [
                 this.startDialog.bind(this),

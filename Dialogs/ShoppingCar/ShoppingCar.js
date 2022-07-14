@@ -24,7 +24,7 @@ class ShoppingCar extends ComponentDialog {
             .addDialog(new ChoicePrompt(CONTINUEBUY_CHOICEPROMPT))
             .addDialog(new TextPrompt(CHANGE_TEXTPROMPT))
             .addDialog(new ChoicePrompt(PAYMENTMETHOD_CHOICEPROMPT))
-            .addDialog(new ConfirmPrompt(PROCEEDBUY_CONFIRMPROMPT))
+            .addDialog(new ConfirmPrompt(PROCEEDBUY_CONFIRMPROMPT,undefined,'pt-br'))
             .addDialog(new WaterfallDialog(SHOPPINGCAR_DIALOG, [
                 this.continueBuy.bind(this),
                 this.nextAction.bind(this),
