@@ -20,7 +20,7 @@ class Menu extends ComponentDialog {
     constructor() {
         super('MENU');
 
-        this.addDialog(new ChoicePrompt(CHOOSE_FILTER, this.choosePromptValidator))
+        this.addDialog(new ChoicePrompt(CHOOSE_FILTER, this.choosePromptValidator,'pt-br',{'pt-br':{includeNumbers:false}}))
             .addDialog(TypeDialog)
             .addDialog(ColorDialog)
             .addDialog(GenderDialog)

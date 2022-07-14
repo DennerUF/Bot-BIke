@@ -15,7 +15,7 @@ class Gender extends ComponentDialog {
     constructor() {
         super(GENDER_DIALOG);
 
-        this.addDialog(new ChoicePrompt(CHOOSE_FILTER_GENDER, this.chooseGenderPromptValidator))
+        this.addDialog(new ChoicePrompt(CHOOSE_FILTER_GENDER, this.chooseGenderPromptValidator,'pt-br',{'pt-br':{includeNumbers:false}}))
             .addDialog(showBikes)
             .addDialog(new WaterfallDialog(GENDER_DIALOG, [
                 this.chooseFilterGender.bind(this),

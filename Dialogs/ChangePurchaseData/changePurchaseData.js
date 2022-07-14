@@ -7,11 +7,12 @@ const msg = require('./message');
 const START_TEXTPROMPT = 'START_TEXTPROMPT';
 const CHANGE_TEXTPROMPT = 'CHANGE_TEXTPROMPT';
 const ChangePurchaseData_DIALOG = 'CHANGEDATA';
+const configConfirmPrompt = {'pt-br': { choices:['Sim','Não'],options:{includeNumbers:false,inlineOr:' ou '}}};
 class ChangePurchaseData extends ComponentDialog {
     constructor() {
         super(ChangePurchaseData_DIALOG);
         this.addDialog(new TextPrompt(START_TEXTPROMPT, this.startDialogValidator))
-            .addDialog(new ConfirmPrompt(CONFIRMDATA_CONFIRMPROMPT,undefined,'pt-br'))
+            .addDialog(new ConfirmPrompt(CONFIRMDATA_CONFIRMPROMPT,undefined,'pt-br',configConfirmPrompt))
             .addDialog(new TextPrompt(CHANGE_TEXTPROMPT))
             .addDialog(new WaterfallDialog(ChangePurchaseData_DIALOG, [
                 this.startDialog.bind(this),

@@ -15,6 +15,7 @@ const PAYMENTMETHOD_CHOICEPROMPT = 'PAYMENTMETHOD_CHOICEPROMPT';
 const CHANGE_TEXTPROMPT = 'CHANGE_TEXTPROMPT';
 const CONTINUEBUY_CHOICEPROMPT = 'CONTINUEBUY_CHOICEPROMPT';
 const PROCEEDBUY_CONFIRMPROMPT = 'PROCEEDBUY_CONFIRMPROMPT';
+const configConfirmPrompt = {'pt-br': { choices:['Sim','Não'],options:{includeNumbers:false,inlineOr:' ou '}}};
 class ShoppingCar extends ComponentDialog {
     constructor() {
         super(SHOPPINGCAR_DIALOG);
@@ -24,7 +25,7 @@ class ShoppingCar extends ComponentDialog {
             .addDialog(new ChoicePrompt(CONTINUEBUY_CHOICEPROMPT))
             .addDialog(new TextPrompt(CHANGE_TEXTPROMPT))
             .addDialog(new ChoicePrompt(PAYMENTMETHOD_CHOICEPROMPT))
-            .addDialog(new ConfirmPrompt(PROCEEDBUY_CONFIRMPROMPT,undefined,'pt-br'))
+            .addDialog(new ConfirmPrompt(PROCEEDBUY_CONFIRMPROMPT,undefined,'pt-br',configConfirmPrompt))
             .addDialog(new WaterfallDialog(SHOPPINGCAR_DIALOG, [
                 this.continueBuy.bind(this),
                 this.nextAction.bind(this),

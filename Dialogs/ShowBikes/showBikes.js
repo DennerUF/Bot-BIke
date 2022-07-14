@@ -7,7 +7,7 @@ const recognizer = require('../../Helpers/getLuis');
 const ShoppingCar = require('../ShoppingCar/ShoppingCar');
 
 const shoppingCar = new ShoppingCar();
-
+const configConfirmPrompt = {'pt-br': { choices:['Sim','Não'],options:{includeNumbers:false,inlineOr:' ou '}}};
 const msg = require('./message');
 const CONFIRM_BUY = 'CONFIRM_BUY';
 const NEXTSTEP_TEXTPROMPT = 'NEXTSTEP_TEXTPROMPT';
@@ -18,7 +18,7 @@ class ShowBikes extends ComponentDialog {
         super(SHOWBIKES_DIALOG);
         this.addDialog(new TextPrompt(TEXT_PROMPT))
             .addDialog(new TextPrompt(NEXTSTEP_TEXTPROMPT))
-            .addDialog(new ConfirmPrompt(CONFIRM_BUY,undefined,'pt-br',{'pt-br': { choices:['Sim','Não'],options:{includeNumbers:false}}}))
+            .addDialog(new ConfirmPrompt(CONFIRM_BUY,undefined,'pt-br',configConfirmPrompt))
             .addDialog(shoppingCar)
             .addDialog(new WaterfallDialog(SHOWBIKES_DIALOG, [
                 this.showBike.bind(this),

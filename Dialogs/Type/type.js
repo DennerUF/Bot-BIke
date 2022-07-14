@@ -15,7 +15,7 @@ class Type extends ComponentDialog {
     constructor() {
         super(TYPE_DIALOG);
 
-        this.addDialog(new ChoicePrompt(CHOOSE_FILTER_TYPE, this.chooseTypePromptValidator))
+        this.addDialog(new ChoicePrompt(CHOOSE_FILTER_TYPE, this.chooseTypePromptValidator,'pt-br',{'pt-br':{includeNumbers:false}}))
             .addDialog(showBikes)
             .addDialog(new WaterfallDialog(TYPE_DIALOG, [
                 this.chooseFilterType.bind(this),

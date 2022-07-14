@@ -14,7 +14,7 @@ class Price extends ComponentDialog {
     constructor() {
         super(PRICE_DIALOG);
 
-        this.addDialog(new ChoicePrompt(CHOOSE_FILTER_PRICE, this.choosePricePromptValidator))
+        this.addDialog(new ChoicePrompt(CHOOSE_FILTER_PRICE, this.choosePricePromptValidator,'pt-br',{'pt-br':{includeNumbers:false}}))
             .addDialog(showBikes)
             .addDialog(new WaterfallDialog(PRICE_DIALOG, [
                 this.chooseFilterPrice.bind(this),

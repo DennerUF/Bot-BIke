@@ -16,7 +16,7 @@ class Color extends ComponentDialog {
     constructor() {
         super(COLOR_DIALOG);
 
-        this.addDialog(new ChoicePrompt(CHOOSE_FILTER_COLOR, this.chooseColorPromptValidator))
+        this.addDialog(new ChoicePrompt(CHOOSE_FILTER_COLOR, this.chooseColorPromptValidator,'pt-br',{'pt-br':{includeNumbers:false}}))
             .addDialog(new TextPrompt(TEXTPROMPT))
             .addDialog(showBikes)
             .addDialog(new WaterfallDialog(COLOR_DIALOG, [
