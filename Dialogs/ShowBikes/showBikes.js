@@ -2,6 +2,7 @@ const { WaterfallDialog, ComponentDialog, DialogTurnStatus, TextPrompt, ConfirmP
 
 const card = require('../../Helpers/cardMaker');
 
+
 const recognizer = require('../../Helpers/getLuis');
 const ShoppingCar = require('../ShoppingCar/ShoppingCar');
 
@@ -17,7 +18,7 @@ class ShowBikes extends ComponentDialog {
         super(SHOWBIKES_DIALOG);
         this.addDialog(new TextPrompt(TEXT_PROMPT))
             .addDialog(new TextPrompt(NEXTSTEP_TEXTPROMPT))
-            .addDialog(new ConfirmPrompt(CONFIRM_BUY,undefined,'pt-br',undefined,{includeNumbers:false}))
+            .addDialog(new ConfirmPrompt(CONFIRM_BUY,undefined,'pt-br',{'pt-br': { choices:['Sim','Não'],options:{includeNumbers:false}}}))
             .addDialog(shoppingCar)
             .addDialog(new WaterfallDialog(SHOWBIKES_DIALOG, [
                 this.showBike.bind(this),
