@@ -28,9 +28,9 @@ module.exports = {
         return {
             attachments: [
                 CardFactory.heroCard(
-                    `Bicicleta **${bike.name}**
-                    \n**Marca**: ${bike.brand}
-                    \n**Preço**: R$ ${bike.price}`,
+                    `Bicicleta **${bike.name}** 
+                     \n **Marca**: ${bike.brand}
+                     \n **Preço**: R$ ${bike.price}`,
                     CardFactory.images([`${bike.image}`]),
                     length <= 1
                         ? ['Mais Informações da bicicleta', 'Explorar outro filtro de pesquisa']

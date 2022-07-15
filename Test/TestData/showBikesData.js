@@ -1,4 +1,7 @@
 module.exports = {
+  confirmBuy:'Quer comprar esta bicicleta agora ? Sim ou Não',
+  nextStepPrompt: "O que você deseja fazer entao ?\n\n   - Ver Próxima opcao de bicicleta\n   - Outro filtro de pesquisa\n   - Encerrar",
+  nextStepPromptOneBike: "O que você deseja fazer entao ?\n\n   - Explorar outro filtro de pesquisa\n   - Encerrar",
     oneBike: [
         {
             "id": 1,
@@ -73,63 +76,6 @@ module.exports = {
           ]
         }
       },
-    descriptionCard:{
-        contentType: 'application/vnd.microsoft.card.hero',
-        content: {
-          title: 'Dropp Z1-X',
-          text: 'Z1-X Dropp é ideal para quem pretende começar a se aventurar em passeios, possui quadro em alumínio com várias opções de cores e tamanhos para que você possa escolher, o sistema de marchas possui 21 velocidades e câmbios com trocadores ez-fire index Dropp que oferecem ótimo desempenho em terrenos elevados. Já a suspensão dianteira 80mm com freio a disco proporciona muito mais segurança e tranquilidade nas frenagens.',
-          images: [
-            {
-              url: 'https://a-static.mlcdn.com.br/800x560/bicicleta-aro-29-dropp-z1-x-suspensao-e-freio-disco-21v-dropp-bike/egcommercecombr/29-273/220743cee525ce287768274d55bdba33.jpg'
-            }
-          ],
-          buttons: [
-            {
-              type: 'imBack',
-              value: 'Ver Proxima opcao de bicicleta',
-              title: 'Ver Proxima opcao de bicicleta',
-              channelData: undefined
-            },
-            {
-              type: 'imBack',
-              value: 'Explorar outro filtro de pesquisa',
-              title: 'Explorar outro filtro de pesquisa',
-              channelData: undefined
-            },
-            {
-              type: 'imBack',
-              value: 'Encerrar',
-              title: 'Encerrar',
-              channelData: undefined
-            }
-          ]
-        }
-      },
-    descriptionCardNoNext:{
-        contentType: 'application/vnd.microsoft.card.hero',
-        content: {
-          title: 'Dropp Z1-X',
-          text: 'Z1-X Dropp é ideal para quem pretende começar a se aventurar em passeios, possui quadro em alumínio com várias opções de cores e tamanhos para que você possa escolher, o sistema de marchas possui 21 velocidades e câmbios com trocadores ez-fire index Dropp que oferecem ótimo desempenho em terrenos elevados. Já a suspensão dianteira 80mm com freio a disco proporciona muito mais segurança e tranquilidade nas frenagens.',
-          images: [
-            {
-              url: 'https://a-static.mlcdn.com.br/800x560/bicicleta-aro-29-dropp-z1-x-suspensao-e-freio-disco-21v-dropp-bike/egcommercecombr/29-273/220743cee525ce287768274d55bdba33.jpg'
-            }
-          ],
-          buttons: [
-            {
-              type: 'imBack',
-              value: 'Explorar outro filtro de pesquisa',
-              title: 'Explorar outro filtro de pesquisa',
-              channelData: undefined
-            },
-            {
-              type: 'imBack',
-              value: 'Encerrar',
-              title: 'Encerrar',
-              channelData: undefined
-            }
-          ]
-        }
-      }
+    descriptionCard:'Bicicleta Dropp Z1-X \n\nZ1-X Dropp é ideal para quem pretende começar a se aventurar em passeios, possui quadro em alumínio com várias opções de cores e tamanhos para que você possa escolher, o sistema de marchas possui 21 velocidades e câmbios com trocadores ez-fire index Dropp que oferecem ótimo desempenho em terrenos elevados. Já a suspensão dianteira 80mm com freio a disco proporciona muito mais segurança e tranquilidade nas frenagens.',
 }
 
