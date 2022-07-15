@@ -9,19 +9,21 @@ module.exports = {
         prompt: `O que você deseja fazer agora ?`,
         choices: [
             { value: 'Finalizar pedido', synonyms: ['finalizar','terminar','concluir'] }, 
-            { value: 'Continuar comprando', synonyms: ['continuar'] }],
-        style: 5,        
+            { value: 'Continuar comprando', synonyms: ['continuar'] }],       
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
     },
     changesInCart: {
         prompt: `O que você deseja fazer então ?`,
         choices: ['Retirar um item do carrinho', 'Adicionar mais bicicletas ao carrinho', 'Desistir Compra'],
-        style: 3,
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
     },
     paymentMethod: {
         prompt: `Escolha o método de pagamento`,
-        choices: ['Boleto', 'Pix', 'Cartão de Crédito'],
+        choices: [
+            { value: 'Boleto', synonyms: ['boleto'] }, 
+        { value: 'Pix', synonyms: ['pix'] },
+        { value: 'Cartão de Crédito', synonyms: ['cartao','cartão','credito','crédito'] }
+    ],
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
     },
     proceedBuy: {

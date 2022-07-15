@@ -23,7 +23,7 @@ class ShoppingCar extends ComponentDialog {
         this.addDialog(register)
             .addDialog(removeBikeCart)
             .addDialog(new ChoicePrompt(CONTINUEBUY_CHOICEPROMPT,undefined,'pt-br',{'pt-br':{includeNumbers:false}}))
-            .addDialog(new ChoicePrompt(CHANGE_CHOICEPROMPT,undefined,'pt-br',{'pt-br':{includeNumbers:false}}))
+            .addDialog(new ChoicePrompt(CHANGE_CHOICEPROMPT,this.validatorchangesInCart,'pt-br',{'pt-br':{includeNumbers:false}}))
             .addDialog(new ChoicePrompt(PAYMENTMETHOD_CHOICEPROMPT),'pt-br',{'pt-br':{includeNumbers:false}})
             .addDialog(new ConfirmPrompt(PROCEEDBUY_CONFIRMPROMPT,undefined,'pt-br',configConfirmPrompt))
             .addDialog(new WaterfallDialog(SHOPPINGCAR_DIALOG, [
@@ -105,6 +105,15 @@ class ShoppingCar extends ComponentDialog {
         }
         return stepContext.replaceDialog('MENU');
        
+    }
+    /**
+     * Validator 'CHANGE_CHOICEPROMPT'
+     * Validator to eliminate perfect match from choicePrompt
+     * @param {TurnContext} stepContext Dialog Context 
+     * @returns {boolean} true
+     */
+    validatorchangesInCart(stepContext){
+        return true;
     }
 
 }

@@ -10,14 +10,14 @@ const shoppingCar = new ShoppingCar();
 const configConfirmPrompt = {'pt-br': { choices:['Sim','Não'],options:{includeNumbers:false,inlineOr:' ou '}}};
 const msg = require('./message');
 const CONFIRM_BUY = 'CONFIRM_BUY';
-const NEXTSTEP_TEXTPROMPT = 'NEXTSTEP_TEXTPROMPT';
+const NEXTSTEP_CHOICEPROMPT = 'NEXTSTEP_CHOICEPROMPT';
 const TEXT_PROMPT = 'textPrompt';
 const SHOWBIKES_DIALOG = 'SHOWBIKES';
 class ShowBikes extends ComponentDialog {
     constructor() {
         super(SHOWBIKES_DIALOG);
         this.addDialog(new TextPrompt(TEXT_PROMPT))
-            .addDialog(new TextPrompt(NEXTSTEP_TEXTPROMPT))
+            .addDialog(new ChoicePrompt(NEXTSTEP_CHOICEPROMPT,this.validatorNextStep,'pt-br',{'pt-br':{includeNumbers:false}}))
             .addDialog(new ConfirmPrompt(CONFIRM_BUY,undefined,'pt-br',configConfirmPrompt))
             .addDialog(shoppingCar)
             .addDialog(new WaterfallDialog(SHOWBIKES_DIALOG, [
@@ -61,7 +61,7 @@ class ShowBikes extends ComponentDialog {
             if(stepContext.result){
                 return stepContext.replaceDialog('SHOPPINGCAR', { bike: stepContext.values.bikes[0] })
             }
-        return stepContext.prompt(NEXTSTEP_TEXTPROMPT, msg.nextStepPrompt(stepContext.values.bikes.length,stepContext.context._activity.channelId));
+        return stepContext.prompt(NEXTSTEP_CHOICEPROMPT, msg.nextStepPrompt(stepContext.values.bikes.length));
         }
         return stepContext.next();
         
@@ -93,8 +93,15 @@ class ShowBikes extends ComponentDialog {
         await stepContext.context.sendActivity(msg.message);
         return stepContext.replaceDialog('MENU');
     }
-
-   
+    /**
+     * Validator 'NEXTSTEP_CHOICEPROMPT'
+     * Validator to eliminate perfect match from choicePrompt
+     * @param {TurnContext} stepContext Dialog Context 
+     * @returns {boolean} true
+     */
+    validatorNextStep(stepContext){
+        return true;
+    }
 
 
 }
