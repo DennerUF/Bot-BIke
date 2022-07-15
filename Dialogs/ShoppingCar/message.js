@@ -1,20 +1,27 @@
-const { ChoiceFactory } = require('botbuilder-dialogs');
+const { ChoiceFactory, ListStyle } = require('botbuilder-dialogs');
 /**
  * Messages dialog ShoppingCar
  */
- module.exports = {
-    bikeAdd:' foi adicionada ao carrinho de compras',
+module.exports = {
+    bikeAdd: ' foi adicionada ao carrinho de compras',
     messageRegisterOrChange: 'Boa escolha! Falta pouco para você finalizar a compra da sua bicicleta ',
     continueBuy: {
         prompt: `O que você deseja fazer agora ?`,
-        choices: ChoiceFactory.toChoices(['Finalizar pedido', 'Continuar comprando']),
+        choices: [
+            { value: 'Finalizar pedido', synonyms: ['finalizar','terminar','concluir'] }, 
+            { value: 'Continuar comprando', synonyms: ['continuar'] }],
+        style: 5,        
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
     },
-    changesInCart : ChoiceFactory.suggestedAction(['Retirar um item do carrinho', 'Adicionar mais bicicletas ao carrinho','Desistir Compra'],`O que você deseja fazer então ?`,'oi',{includeNumbers:false}),
-    changesInCartWhatsapp : `O que você deseja fazer então ?\n\n _-Retirar um item do carrinho_\n _-Adicionar mais bicicletas ao carrinho\n _-Desistir Compra`,
-    paymentMethod : {
+    changesInCart: {
+        prompt: `O que você deseja fazer então ?`,
+        choices: ['Retirar um item do carrinho', 'Adicionar mais bicicletas ao carrinho', 'Desistir Compra'],
+        style: 3,
+        retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
+    },
+    paymentMethod: {
         prompt: `Escolha o método de pagamento`,
-        choices: ChoiceFactory.toChoices(['Boleto', 'Pix','Cartão de Crédito']),
+        choices: ['Boleto', 'Pix', 'Cartão de Crédito'],
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
     },
     proceedBuy: {
@@ -27,20 +34,20 @@ const { ChoiceFactory } = require('botbuilder-dialogs');
      * @param {String} channel Message channel
      * @returns {String} Shopping cart details
      */
-    dataPurchase:(bikes,channel)=>{
+    dataPurchase: (bikes, channel) => {
         const now = new Date();
-        let month =(now.getMonth()+1).toString();
+        let month = (now.getMonth() + 1).toString();
         month = month.length == 1 ? `0${month}` : month;
         let price = 0;
         let msg = `Este é o seu carrinho de compras. Os valores são válidos para ${now.getDate()}/${month}/${now.getFullYear()}\n\nProdutos:`
-        bikes.map((bike)=>{
-            price+= bike.price
-            msg+=`\n Bicicleta ${bike.name}`
+        bikes.map((bike) => {
+            price += bike.price
+            msg += `\n Bicicleta ${bike.name}`
         })
-        msg+= (channel === 'whatsapp')
-        ? `\n\n*Valor Total*: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`
-        : `\n\n**Valor Total**: R$${price.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
+        msg += (channel === 'whatsapp')
+            ? `\n\n*Valor Total*: R$${price.toLocaleString('pt-br', { minimumFractionDigits: 2 })}`
+            : `\n\n**Valor Total**: R$${price.toLocaleString('pt-br', { minimumFractionDigits: 2 })}`;
         return msg;
     }
-   
+
 }

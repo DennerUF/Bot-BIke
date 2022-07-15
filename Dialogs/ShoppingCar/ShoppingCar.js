@@ -12,7 +12,7 @@ const dataBase = require('../../DataBase/actionsDB');
 
 const SHOPPINGCAR_DIALOG = 'SHOPPINGCAR';
 const PAYMENTMETHOD_CHOICEPROMPT = 'PAYMENTMETHOD_CHOICEPROMPT';
-const CHANGE_TEXTPROMPT = 'CHANGE_TEXTPROMPT';
+const CHANGE_CHOICEPROMPT = 'CHANGE_CHOICEPROMPT';
 const CONTINUEBUY_CHOICEPROMPT = 'CONTINUEBUY_CHOICEPROMPT';
 const PROCEEDBUY_CONFIRMPROMPT = 'PROCEEDBUY_CONFIRMPROMPT';
 const configConfirmPrompt = {'pt-br': { choices:['Sim','Não'],options:{includeNumbers:false,inlineOr:' ou '}}};
@@ -22,9 +22,9 @@ class ShoppingCar extends ComponentDialog {
 
         this.addDialog(register)
             .addDialog(removeBikeCart)
-            .addDialog(new ChoicePrompt(CONTINUEBUY_CHOICEPROMPT))
-            .addDialog(new TextPrompt(CHANGE_TEXTPROMPT))
-            .addDialog(new ChoicePrompt(PAYMENTMETHOD_CHOICEPROMPT))
+            .addDialog(new ChoicePrompt(CONTINUEBUY_CHOICEPROMPT,undefined,'pt-br',{'pt-br':{includeNumbers:false}}))
+            .addDialog(new ChoicePrompt(CHANGE_CHOICEPROMPT,undefined,'pt-br',{'pt-br':{includeNumbers:false}}))
+            .addDialog(new ChoicePrompt(PAYMENTMETHOD_CHOICEPROMPT),'pt-br',{'pt-br':{includeNumbers:false}})
             .addDialog(new ConfirmPrompt(PROCEEDBUY_CONFIRMPROMPT,undefined,'pt-br',configConfirmPrompt))
             .addDialog(new WaterfallDialog(SHOPPINGCAR_DIALOG, [
                 this.continueBuy.bind(this),
@@ -82,9 +82,7 @@ class ShoppingCar extends ComponentDialog {
      */
     async registerOrChange(stepContext) {
         if (!stepContext.result) {
-            return (stepContext.context._activity.channelId === 'whatsapp')
-            ? stepContext.prompt(CHANGE_TEXTPROMPT, msg.changesInCartWhatsapp)
-            : stepContext.prompt(CHANGE_TEXTPROMPT, msg.changesInCart);
+            return stepContext.prompt(CHANGE_CHOICEPROMPT, msg.changesInCart);
         }
         await stepContext.context.sendActivity(msg.messageRegisterOrChange);
         return stepContext.prompt(PAYMENTMETHOD_CHOICEPROMPT, msg.paymentMethod);
