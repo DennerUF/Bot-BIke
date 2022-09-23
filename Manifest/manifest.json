@@ -12,5 +12,11 @@
             "endpointUrl": "https://dbike.azurewebsites.net/api/messages",
             "msAppId": "b288a5fa-425f-4eb0-9d42-bcad3fb4d199"
         }
-    ]
+    ],
+    "activities": {
+
+    },
+    "definitions": {
+        
+    }
 }
