@@ -30,7 +30,7 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
 });
 dataBase.connection();
 // manifest
-server.get('/manifest/*', restify.plugins.serveStatic({ directory: './manifest', appendRequestPath: false }));
+server.get('/manifest/testBike', restify.plugins.serveStatic({ directory: './manifest', appendRequestPath: false }));
 
 const allowedCallers = (process.env.AllowedCallers || '').split(',').filter((val) => val) || [];
 
