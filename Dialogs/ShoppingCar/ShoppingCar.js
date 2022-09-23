@@ -22,9 +22,9 @@ class ShoppingCar extends ComponentDialog {
 
         this.addDialog(register)
             .addDialog(removeBikeCart)
-            .addDialog(new ChoicePrompt(CONTINUEBUY_CHOICEPROMPT,undefined,'pt-br',{'pt-br':{includeNumbers:false}}))
+            .addDialog(new ChoicePrompt(CONTINUEBUY_CHOICEPROMPT,undefined,'pt-br',{'pt-br':{includeNumbers:false,inlineOr:' ou '}}))
             .addDialog(new ChoicePrompt(CHANGE_CHOICEPROMPT,this.validatorchangesInCart,'pt-br',{'pt-br':{includeNumbers:false}}))
-            .addDialog(new ChoicePrompt(PAYMENTMETHOD_CHOICEPROMPT),'pt-br',{'pt-br':{includeNumbers:false}})
+            .addDialog(new ChoicePrompt(PAYMENTMETHOD_CHOICEPROMPT,undefined,'pt-br',{'pt-br':{includeNumbers:false}}))
             .addDialog(new ConfirmPrompt(PROCEEDBUY_CONFIRMPROMPT,undefined,'pt-br',configConfirmPrompt))
             .addDialog(new WaterfallDialog(SHOPPINGCAR_DIALOG, [
                 this.continueBuy.bind(this),

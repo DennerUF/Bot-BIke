@@ -8,8 +8,8 @@ module.exports = {
     continueBuy: {
         prompt: `O que você deseja fazer agora ?`,
         choices: [
-            { value: 'Finalizar pedido', synonyms: ['finalizar','terminar','concluir'] }, 
-            { value: 'Continuar comprando', synonyms: ['continuar'] }],       
+            { value: 'Finalizar pedido', synonyms: ['finalizar', 'terminar', 'concluir'] },
+            { value: 'Continuar comprando', synonyms: ['continuar'] }],
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
     },
     changesInCart: {
@@ -20,10 +20,10 @@ module.exports = {
     paymentMethod: {
         prompt: `Escolha o método de pagamento`,
         choices: [
-            { value: 'Boleto', synonyms: ['boleto'] }, 
-        { value: 'Pix', synonyms: ['pix'] },
-        { value: 'Cartão de Crédito', synonyms: ['cartao','cartão','credito','crédito'] }
-    ],
+            { value: 'Boleto', synonyms: ['boleto'] },
+            { value: 'Pix', synonyms: ['pix'] },
+            { value: 'Cartão de Crédito', synonyms: ['cartao', 'cartão', 'credito', 'crédito'] }
+        ],
         retryPrompt: 'Não entendi. Para continuarmos, você precisa me indicar o que deseja'
     },
     proceedBuy: {
