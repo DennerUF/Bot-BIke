@@ -10,6 +10,11 @@ const {
     MemoryStorage,
     UserState
 } = require('botbuilder');
+const {
+    allowedCallersClaimsValidator,
+    AuthenticationConfiguration,
+    AuthenticationConstants
+} = require('botframework-connector');
 
 
 const { WelcomeBot } = require('./Bots/welcomeBot');
@@ -24,7 +29,25 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log(`\n${server.name} listening to ${server.url}`);
 });
 dataBase.connection();
+// manifest
+server.get('/manifest/*', restify.plugins.serveStatic({ directory: './manifest', appendRequestPath: false }));
 
+const allowedCallers = (process.env.AllowedCallers || '').split(',').filter((val) => val) || [];
+
+const claimsValidators = allowedCallersClaimsValidator(allowedCallers);
+let validTokenIssuers = [];
+const { MicrosoftAppTenantId } = process.env;
+
+if (MicrosoftAppTenantId) {
+    validTokenIssuers = [
+        `${ AuthenticationConstants.ValidTokenIssuerUrlTemplateV1 }${ MicrosoftAppTenantId }/`,
+        `${ AuthenticationConstants.ValidTokenIssuerUrlTemplateV2 }${ MicrosoftAppTenantId }/v2.0/`,
+        `${ AuthenticationConstants.ValidGovernmentTokenIssuerUrlTemplateV1 }${ MicrosoftAppTenantId }/`,
+        `${ AuthenticationConstants.ValidGovernmentTokenIssuerUrlTemplateV2 }${ MicrosoftAppTenantId }/v2.0/`
+    ];
+}
+
+const authConfig = new AuthenticationConfiguration([], claimsValidators, validTokenIssuers);
 
 const credentialsFactory = new ConfigurationServiceClientCredentialFactory({
     MicrosoftAppId: process.env.MicrosoftAppId,
@@ -33,7 +56,7 @@ const credentialsFactory = new ConfigurationServiceClientCredentialFactory({
     MicrosoftAppTenantId: process.env.MicrosoftAppTenantId
 });
 
-const botFrameworkAuthentication = createBotFrameworkAuthenticationFromConfiguration(null, credentialsFactory);
+const botFrameworkAuthentication = createBotFrameworkAuthenticationFromConfiguration(null, credentialsFactory, authConfig);
 
 const adapter = new CloudAdapter(botFrameworkAuthentication);
 
@@ -64,7 +87,7 @@ adapter.onTurnError = async (context, error) => {
     await conversationState.clear(context);
 };
 
-server.get('/manifest/*', restify.plugins.serveStatic({ directory: './manifest', appendRequestPath: false }));
+
 
 server.post('/api/messages', async (req, res) => {
     await adapter.process(req, res, async (context) =>{
