@@ -7,7 +7,7 @@
     "publisherName": "Denner",
     "endpoints": [
         {
-            "name": "testBike",
+            "name": "manifest",
             "protocol": "BotFrameworkV3",
             "endpointUrl": "https://dbike.azurewebsites.net/api/messages",
             "msAppId": "b288a5fa-425f-4eb0-9d42-bcad3fb4d199"
