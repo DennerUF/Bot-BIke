@@ -1,0 +1,16 @@
+{
+    "$schema": "https://schemas.botframework.com/schemas/skills/v2.2/skill-manifest.json",
+    "$id": "botBike",
+    "name": "skill bot bike",
+    "version": "1.0",
+    "description": "skill bot bike test",
+    "publisherName": "Denner",
+    "endpoints": [
+        {
+            "name": "testBike",
+            "protocol": "BotFrameworkV3",
+            "endpointUrl": "https://dbike.azurewebsites.net/api/messages",
+            "msAppId": "b288a5fa-425f-4eb0-9d42-bcad3fb4d199"
+        }
+    ]
+}

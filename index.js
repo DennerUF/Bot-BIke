@@ -64,6 +64,8 @@ adapter.onTurnError = async (context, error) => {
     await conversationState.clear(context);
 };
 
+server.get('/manifest/*', restify.plugins.serveStatic({ directory: './manifest', appendRequestPath: false }));
+
 server.post('/api/messages', async (req, res) => {
     await adapter.process(req, res, async (context) =>{
         context.activity.locale='pt-br';
