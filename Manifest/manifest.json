@@ -14,9 +14,12 @@
         }
     ],
     "activities": {
-
+        "bikeFlow": {
+            "type": "event",
+            "name": "testB"
+        }
     },
     "definitions": {
-        
+
     }
 }
